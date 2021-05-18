@@ -48,16 +48,14 @@ void loop()
   for (int avg = 0; avg < 8; avg++)
   {
     INA.setAverage(avg);
-    Serial.print("  AVG:\t");
-    Serial.println(avg);
-    Serial.print("SHUNT:\t");
-    Serial.println(INA.getShuntVoltage(), 2);
-    Serial.print("  BUS:\t");
-    Serial.println(INA.getBusVoltage(), 2);
-    Serial.print("POWER:\t");
-    Serial.println(INA.getPower(), 2);
-    Serial.print(" CURR:\t");
-    Serial.println(INA.getCurrent(), 2);
+    Serial.print(avg);
+    Serial.print(INA.getBusVoltage(), 4);
+    Serial.print("\t");
+    Serial.print(INA.getShuntVoltage(), 4);
+    Serial.print("\t");
+    Serial.print(INA.getCurrent(), 4);
+    Serial.print("\t");
+    Serial.print(INA.getPower(), 4);
     Serial.println();
     delay(1000);
   }

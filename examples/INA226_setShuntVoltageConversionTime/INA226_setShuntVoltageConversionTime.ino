@@ -48,16 +48,14 @@ void loop()
   for (int svct = 0; svct < 8; svct++)
   {
     INA.setShuntVoltageConversionTime(svct);
-    Serial.print(" SVCT:\t");
-    Serial.println(avg);
-    Serial.print("SHUNT:\t");
-    Serial.println(INA.getShuntVoltage(), 2);
-    Serial.print("  BUS:\t");
-    Serial.println(INA.getBusVoltage(), 2);
-    Serial.print("POWER:\t");
-    Serial.println(INA.getPower(), 2);
-    Serial.print(" CURR:\t");
-    Serial.println(INA.getCurrent(), 2);
+    Serial.print(svct);
+    Serial.print(INA.getBusVoltage(), 4);
+    Serial.print("\t");
+    Serial.print(INA.getShuntVoltage(), 4);
+    Serial.print("\t");
+    Serial.print(INA.getCurrent(), 4);
+    Serial.print("\t");
+    Serial.print(INA.getPower(), 4);
     Serial.println();
     delay(1000);
   }
