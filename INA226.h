@@ -35,14 +35,14 @@ public:
   // calibration & configuration
   // read datasheet for details
   void     reset();
-  void     setAverage(uint8_t avg);
-  void     setBusVoltageConversionTime(uint8_t bvct);
-  void     setShuntVoltageConversionTime(uint8_t svct);
+  void     setAverage(uint8_t avg = 0);
+  void     setBusVoltageConversionTime(uint8_t bvct = 4);
+  void     setShuntVoltageConversionTime(uint8_t svct = 4);
   // TODO ?? GETTERS?
 
 
   // operating mode
-  void     setMode(uint8_t mode);
+  void     setMode(uint8_t mode = 7);
   uint8_t  getMode();
   void     shutDown()                 { setMode(0); };
   void     setModeShuntTrigger()      { setMode(1); };
@@ -50,7 +50,7 @@ public:
   void     setModeShuntBusTrigger()   { setMode(3); };
   void     setModeShuntContinuous()   { setMode(5); };
   void     setModeBusContinuous()     { setMode(6); };
-  void     setModeShuntBusContinuous(){ setMode(7); };
+  void     setModeShuntBusContinuous(){ setMode(7); };  // default.
 
 
   // alert ....

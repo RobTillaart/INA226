@@ -74,30 +74,28 @@ float INA226::getShuntVoltage()
     val++;
     return val * -2.5e-6;
   }
-  return val * 2.5e-6;
+  return val * 2.5e-6;   // 2.5 uV
 }
 
 
 float INA226::getBusVoltage()
 {
   uint16_t val = _readRegister(INA226_BUS_VOLTAGE);
-  return val * 1.25e-3;
+  return val * 1.25e-3;  // 1.25 mV
 }
 
 
 float INA226::getPower()
 {
-  // TODO
   uint16_t val = _readRegister(INA226_POWER);
-  return val * 1.0;
+  return val * 25e-3;   // 25 mW
 }
 
 
 float INA226::getCurrent()
 {
-  // TODO
   uint16_t val = _readRegister(INA226_CURRENT);
-  return val * 1.0;
+  return val * 1e-3;   // 1 mA
 }
 
 
