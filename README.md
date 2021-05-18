@@ -109,5 +109,4 @@ See examples..
 
 - testtestestest
 - improve readme.md
-- Getters for configuration functions
 - add tables to readme.md
