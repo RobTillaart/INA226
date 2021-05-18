@@ -18,6 +18,7 @@
 #define INA226_CURRENT              0x04
 #define INA226_CALIBRATION          0x05
 #define INA226_MASK_ENABLE          0x06
+#define INA226_ALERT_LIMIT          0x07
 #define INA226_MANUFACTURER         0xFE
 #define INA226_DIE_ID               0xFF
 
@@ -28,9 +29,9 @@
 //
 INA226::INA226(const int8_t address, TwoWire *wire)
 {
-  // address should be between 0x40 and 0x4F
-  _address = address;
-  _wire = wire;
+  _address     = address;
+  _wire        = wire;
+  _current_LSB = 0;
 }
 
 
@@ -74,69 +75,120 @@ float INA226::getShuntVoltage()
     val++;
     return val * -2.5e-6;
   }
-  return val * 2.5e-6;   // 2.5 uV
+  return val * 2.5e-6;   // fixed 2.50 uV
 }
 
 
 float INA226::getBusVoltage()
 {
   uint16_t val = _readRegister(INA226_BUS_VOLTAGE);
-  return val * 1.25e-3;  // 1.25 mV
+  return val * 1.25e-3;  // fixed 1.25 mV
 }
 
 
 float INA226::getPower()
 {
   uint16_t val = _readRegister(INA226_POWER);
-  return val * 25e-3;   // 25 mW
+  return val * 25 * _current_LSB;
 }
 
 
 float INA226::getCurrent()
 {
   uint16_t val = _readRegister(INA226_CURRENT);
-  return val * 1e-3;   // 1 mA
+  return val * _current_LSB;
 }
 
 
 ////////////////////////////////////////////////////////
 //
-// calibration & configuration
+// Configuration
 //
 void INA226::reset()
 {
-  uint16_t m = _readRegister(INA226_CONFIGURATION);
-  m |= 0x800;
-  _writeRegister(INA226_CONFIGURATION, m);
+  uint16_t mask = _readRegister(INA226_CONFIGURATION);
+  mask |= 0x800;
+  _writeRegister(INA226_CONFIGURATION, mask);
 }
+
 
 void INA226::setAverage(uint8_t avg)
 {
   if (avg > 7) return;
-  uint16_t m = _readRegister(INA226_CONFIGURATION);
-  m &= 0xF1FF;
-  m |= (avg << 9);
-  _writeRegister(INA226_CONFIGURATION, m);
+  uint16_t mask = _readRegister(INA226_CONFIGURATION);
+  mask &= 0xF1FF;
+  mask |= (avg << 9);
+  _writeRegister(INA226_CONFIGURATION, mask);
+}
+
+
+uint8_t INA226::getAverage()
+{
+  uint16_t mask = _readRegister(INA226_CONFIGURATION);
+  mask >>= 9;
+  mask &= 7;
+  return mask;
 }
 
 
 void INA226::setBusVoltageConversionTime(uint8_t bvct)
 {
   if (bvct > 7) return;
-  uint16_t m = _readRegister(INA226_CONFIGURATION);
-  m &= 0xFE3F;
-  m |= (bvct << 6);
-  _writeRegister(INA226_CONFIGURATION, m);
+  uint16_t mask = _readRegister(INA226_CONFIGURATION);
+  mask &= 0xFE3F;
+  mask |= (bvct << 6);
+  _writeRegister(INA226_CONFIGURATION, mask);
+}
+
+
+uint8_t INA226::getBusVoltageConversionTime()
+{
+  uint16_t mask = _readRegister(INA226_CONFIGURATION);
+  mask >>= 6;
+  mask &= 7;
+  return mask;
 }
 
 
 void INA226::setShuntVoltageConversionTime(uint8_t svct)
 {
   if (svct > 7) return;
-  uint16_t m = _readRegister(INA226_CONFIGURATION);
-  m &= 0xFFC7;
-  m |= (svct << 3);
-  _writeRegister(INA226_CONFIGURATION, m);
+  uint16_t mask = _readRegister(INA226_CONFIGURATION);
+  mask &= 0xFFC7;
+  mask |= (svct << 3);
+  _writeRegister(INA226_CONFIGURATION, mask);
+}
+
+
+uint8_t INA226::getShuntVoltageConversionTime()
+{
+  uint16_t mask = _readRegister(INA226_CONFIGURATION);
+  mask >>= 3;
+  mask &= 7;
+  return mask;
+}
+
+
+////////////////////////////////////////////////////////
+//
+// Calibration
+//
+void INA226::setMaxCurrentShunt(float ampere, float ohm)
+{
+  _current_LSB = ampere * (1.0 / 32768.0);
+  // make the LSB a round number
+  float factor = 1;
+  //  Serial.println(_current_LSB, 6);
+  while (_current_LSB < 1)
+  {
+    _current_LSB *= 10;
+    factor *= 10;
+  }
+  _current_LSB = 10.0 / factor;
+  //  Serial.println(_current_LSB, 6);
+  uint16_t calib = round(0.00512 / (_current_LSB * ohm));
+  //  Serial.println(calib);
+  _writeRegister(INA226_CALIBRATION, calib);
 }
 
 
@@ -157,6 +209,34 @@ void INA226::setMode(uint8_t mode)
 uint8_t INA226::getMode()
 {
   return _readRegister(INA226_CONFIGURATION) & 0x0007;
+}
+
+
+////////////////////////////////////////////////////////
+//
+// alert
+//
+void INA226::setAlertRegister(uint16_t mask)
+{
+  _writeRegister(INA226_MASK_ENABLE, (mask & 0xFC00));
+}
+
+
+uint16_t INA226::getAlertFlag()
+{
+  return _readRegister(INA226_MASK_ENABLE) & 0x001F;
+}
+
+
+void INA226::setAlertLimit(uint16_t limit)
+{
+  _writeRegister(INA226_ALERT_LIMIT, limit);
+}
+
+
+uint16_t INA226::getAlertLimit()
+{
+  return _readRegister(INA226_ALERT_LIMIT);
 }
 
 

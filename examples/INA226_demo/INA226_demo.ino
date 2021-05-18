@@ -29,21 +29,25 @@ void setup()
   Serial.println(INA.getManufacturerID(), HEX);
   Serial.print("DIE:\t");
   Serial.println(INA.getDieID(), HEX);
+  delay(100);
+  INA.setMaxCurrentShunt(15, 0.002);
+  Serial.print("LSB:\t");
+  Serial.println(INA.getCurrentLSB(), 6);
+  Serial.println("\n\n");
 
-  Serial.println("done...");
+  Serial.println("BUS\tSHUNT\tCURRENT\tPOWER");
 }
 
 
 void loop()
 {
-  Serial.print("SHUNT:\t");
-  Serial.println(INA.getShuntVoltage(), 2);
-  Serial.print("  BUS:\t");
-  Serial.println(INA.getBusVoltage(), 2);
-  Serial.print("POWER:\t");
-  Serial.println(INA.getPower(), 2);
-  Serial.print(" CURR:\t");
-  Serial.println(INA.getCurrent(), 2);
+  Serial.print(INA.getBusVoltage(), 4);
+  Serial.print("\t");
+  Serial.print(INA.getShuntVoltage(), 4);
+  Serial.print("\t");
+  Serial.print(INA.getCurrent(), 4);
+  Serial.print("\t");
+  Serial.print(INA.getPower(), 4);
   Serial.println();
   delay(1000);
 }
