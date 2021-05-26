@@ -9,10 +9,7 @@
 
 // EXPERIMENTAL CODE - NOT TESTED.
 // TODO 
-// - what is a reasonable limit?
-// - which units to define a limit per mask ?
-//   
-// - how to test 
+
 
 
 #include "INA226.h"

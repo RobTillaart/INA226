@@ -79,7 +79,11 @@ public:
 
 
   // Alert
-  // separate functions per flag?
+  // - separate functions per flag?
+  // - what is a reasonable limit?
+  // - which units to define a limit per mask ?
+  //   same as voltage registers ?
+  // - how to test 
   void     setAlertRegister(uint16_t mask);
   uint16_t getAlertFlag();
   void     setAlertLimit(uint16_t limit);
