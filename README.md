@@ -14,6 +14,8 @@ Arduino library for the INA226 power sensor
 Experimental library for the INA226 power sensor.
 Not all functionality is tested / investigated.
 
+==> **USE WITH CARE**
+
 The INA226 is a voltage, current and power measurement device. a few important maxima. (See datasheet, ch. 6)
 
 |  description  |  max  |  unit  |
@@ -167,6 +169,8 @@ The alert line falls when alert is reached.
 ## Operational
 
 See examples..
+
+Not all examples are tested. 
 
 
 ## TODO

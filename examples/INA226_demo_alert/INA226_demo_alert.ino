@@ -8,8 +8,6 @@
 
 
 // EXPERIMENTAL CODE - NOT TESTED.
-// TODO 
-
 
 
 #include "INA226.h"
