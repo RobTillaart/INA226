@@ -7,10 +7,19 @@
 //     URL: https://github.com/RobTillaart/INA226
 
 
+// EXPERIMENTAL CODE - NOT TESTED.
+// TODO 
+// - what is a reasonable limit?
+// - which units to define a limit per mask ?
+//   
+// - how to test 
+
+
 #include "INA226.h"
 #include "Wire.h"
 
 INA226 INA(0x40);
+
 
 void setup()
 {
@@ -23,16 +32,35 @@ void setup()
     Serial.println("could not connect. Fix and Reboot");
   }
 
-  // TODO
-  // set register
-  
+  // to be tested....
+  // measure POWER LIMIT ?
+  // assume milisamperes.
+  uint16_t limit = 1000;
+  INA.setAlertLimit(limit);
 
-  Serial.println("done...");
+  // read back to verify.
+  uint16_t test_limit = INA.getAlertLimit();
+  if (test_limit != limit)
+  {
+    Serial.print("Unexpected limit:\t");
+    Serial.println(test_limit);
+    while(1);
+  }
+  
+  uint16_t alert_mask = INA226_POWER_OVER_LIMIT;
+  INA.setAlertRegister(mask);
 }
 
 
 void loop()
 {
+  uint16_t flags = INA.getAlertFlag();
+  if (flags )
+  {
+    Serial.print("alarm:\t");
+    Serial.println(INA.getShuntVoltage());
+  }
 }
+
 
 // -- END OF FILE --

@@ -49,6 +49,8 @@ unittest(test_constructor)
 {
   fprintf(stderr, "\nVERSION: %s\n", INA226_LIB_VERSION);
   INA226 INA();
+  
+  assertTrue(1);
 }
 
 
