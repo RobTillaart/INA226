@@ -43,7 +43,7 @@ void setup()
   }
   
   uint16_t alert_mask = INA226_POWER_OVER_LIMIT;
-  INA.setAlertRegister(mask);
+  INA.setAlertRegister(alert_mask);
 }
 
 
