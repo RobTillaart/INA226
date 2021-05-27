@@ -1,12 +1,14 @@
 //    FILE: INA266.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA266 power sensor
 //     URL: https://github.com/RobTillaart/INA226
 //
 //  HISTORY:
 //  0.1.0   2021-05-18  initial version
+//  0.1.1   2021-
+
 
 
 #include "INA226.h"

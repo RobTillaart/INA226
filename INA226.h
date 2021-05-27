@@ -1,7 +1,7 @@
 #pragma once
 //    FILE: INA266.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA266 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -14,7 +14,7 @@
 #include "Wire.h"
 
 
-#define INA226_LIB_VERSION         (F("0.1.0"))
+#define INA226_LIB_VERSION         (F("0.1.1"))
 
 
 // set by setAlertRegister
