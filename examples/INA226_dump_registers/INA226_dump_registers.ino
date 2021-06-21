@@ -23,7 +23,11 @@ void setup()
   {
     Serial.println("could not connect. Fix and Reboot");
   }
+}
 
+
+void loop()
+{
   Serial.println("\n\tREG\tVALUE\tVALUE_X");
   for (int r = 0; r < 6; r++)
   {
@@ -35,12 +39,10 @@ void setup()
     Serial.println(INA.getRegister(r), HEX);
   }
   Serial.println();
+  
+  delay(1000);
 }
 
-
-void loop()
-{
-}
 
 
 // -- END OF FILE --
