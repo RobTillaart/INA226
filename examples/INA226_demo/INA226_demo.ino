@@ -1,7 +1,7 @@
 //
 //    FILE: INA226_demo.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.0
+// VERSION: 0.1.1
 // PURPOSE: demo
 //    DATE: 2021-05-18
 //     URL: https://github.com/RobTillaart/INA226
@@ -30,9 +30,9 @@ void setup()
   Serial.print("DIE:\t");
   Serial.println(INA.getDieID(), HEX);
   delay(100);
-  INA.setMaxCurrentShunt(15, 0.002);
+  INA.setMaxCurrentShunt(1, 0.002);
   Serial.print("LSB:\t");
-  Serial.println(INA.getCurrentLSB(), 6);
+  Serial.println(INA.getCurrentLSB(), 10);
   Serial.println("\n\n");
 
   Serial.println("BUS\tSHUNT\tCURRENT\tPOWER");
@@ -41,13 +41,20 @@ void setup()
 
 void loop()
 {
-  Serial.print(INA.getBusVoltage(), 4);
+  //  for (int r = 0; r < 6; r++)
+  //  {
+  //    Serial.print(INA.getRegister(r), HEX);
+  //    Serial.print('\t');
+  //  }
+  //  Serial.println();
+
+  Serial.print(INA.getBusVoltage(), 3);
   Serial.print("\t");
-  Serial.print(INA.getShuntVoltage(), 4);
+  Serial.print(INA.getShuntVoltage_mV(), 3);
   Serial.print("\t");
-  Serial.print(INA.getCurrent(), 4);
+  Serial.print(INA.getCurrent_mA(), 3);
   Serial.print("\t");
-  Serial.print(INA.getPower(), 4);
+  Serial.print(INA.getPower_mW(), 3);
   Serial.println();
   delay(1000);
 }

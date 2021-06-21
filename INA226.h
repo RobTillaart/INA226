@@ -14,7 +14,7 @@
 #include "Wire.h"
 
 
-#define INA226_LIB_VERSION         (F("0.1.1"))
+#define INA226_LIB_VERSION              (F("0.1.1"))
 
 
 // set by setAlertRegister
@@ -51,6 +51,10 @@ public:
   float    getBusVoltage();
   float    getPower();
   float    getCurrent();
+  // scale
+  float    getShuntVoltage_mV() { return getShuntVoltage() * 1000.0; };
+  float    getPower_mW()        { return getPower() * 1000.0; };
+  float    getCurrent_mA()      { return getCurrent() * 1000.0; };
 
   // Configuration
   void     reset();
@@ -62,7 +66,7 @@ public:
   uint8_t  getShuntVoltageConversionTime();
 
   // Calibration
-  void     setMaxCurrentShunt(float ampere = 10.0, float ohm = 0.1);
+  void     setMaxCurrentShunt(float ampere = 20.0, float ohm = 0.002);
   float    getCurrentLSB() { return _current_LSB; };
 
 
@@ -93,7 +97,7 @@ public:
   // Meta information
   uint16_t getManufacturerID();   // should return 0x5449
   uint16_t getDieID();            // should return 0x2260
-
+  // uint16_t getRegister(uint8_t reg)  { return _readRegister(reg); };
 
 private:
 

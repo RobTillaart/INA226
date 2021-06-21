@@ -7,8 +7,7 @@
 //
 //  HISTORY:
 //  0.1.0   2021-05-18  initial version
-//  0.1.1   2021-
-
+//  0.1.1   2021-06-21  improved calibration + added functions
 
 
 #include "INA226.h"
@@ -97,7 +96,7 @@ float INA226::getPower()
 
 float INA226::getCurrent()
 {
-  uint16_t val = _readRegister(INA226_CURRENT);
+  float val = _readRegister(INA226_CURRENT);
   return val * _current_LSB;
 }
 
@@ -177,20 +176,27 @@ uint8_t INA226::getShuntVoltageConversionTime()
 //
 void INA226::setMaxCurrentShunt(float ampere, float ohm)
 {
-  _current_LSB = ampere * (1.0 / 32768.0);
+  _current_LSB = ampere * 3.0517578125e-005;  // ampere / 32768;
   // make the LSB a round number
-  float factor = 1;
-  //  Serial.println(_current_LSB, 6);
+  // TODO not sure is this is more accurate / precise
+  // Serial.print("current_LSB:\t");
+  // Serial.println(_current_LSB, 10);
+  
+  uint32_t factor = 1;
   while (_current_LSB < 1)
   {
     _current_LSB *= 10;
     factor *= 10;
   }
   _current_LSB = 10.0 / factor;
-  //  Serial.println(_current_LSB, 6);
   uint16_t calib = round(0.00512 / (_current_LSB * ohm));
-  //  Serial.println(calib);
   _writeRegister(INA226_CALIBRATION, calib);
+
+  // DEBUG
+  // Serial.print("current_LSB:\t");
+  // Serial.println(_current_LSB, 10);
+  // Serial.print("Calibration:\t");
+  // Serial.println(calib);
 }
 
 

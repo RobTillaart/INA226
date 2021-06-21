@@ -16,26 +16,24 @@ Not all functionality is tested / investigated.
 
 ==> **USE WITH CARE**
 
-The INA226 is a voltage, current and power measurement device. a few important maxima. (See datasheet, ch. 6)
+The INA226 is a voltage, current and power measurement device. a few important maxima. (See datasheet, chapter 6)
 
 |  description  |  max  |  unit  |
 |:--------------|------:|-------:|
-| bus voltage   | 36    | Volt   |
+| bus voltage   |  36   | Volt   |
 | shunt voltage |  80   | mVolt  |
-| current       |  ??   | Ampere |
+| current       |  20   | Ampere | 
 
 
 The sensor can have 16 different I2C addresses, which depends on how the A0 and A1 address lines are connected to the SCL, SDA, GND and VCC pins.
 
 See datasheet - table 2 - datasheet.
 
-TODO: elaborate.
-
-
 
 ## Interface
 
 read datasheet for details
+
 
 ### Constructor
 
@@ -54,8 +52,11 @@ the sensor. Also the value is not meaningful if there is no shunt connected.
 
 - **float getShuntVoltage()** idem.
 - **float getBusVoltage()** idem. Max 36 Volt.
-- **float getCurrent()** is the current through the shunt.
-- **float getPower()** is the current x BusVoltage
+- **float getCurrent()** is the current through the shunt in Ampere
+- **float getPower()** is the current x BusVoltage in Watt
+- **float getShuntVoltage_mV()** idem, in millivolts
+- **float getCurrent_mA()** idem in milliAmpere
+- **float getPower_mW()** idem in milliWatt
 
 
 ### Configuration
@@ -104,10 +105,10 @@ Note that total conversion time can take up to 1024 \* 8.3 ms ~ 10 seconds.
 
 ### Calibration
 
-See daatsheet, not tested yet.
+See datasheet
 
-- **void setMaxCurrentShunt(float ampere = 10.0, float ohm = 0.1)** set the calibration register based upon the shunt and the max ampere. From this the LSB is derived. Note the function will round up the LSB to nearest round value.
-- **float getCurrentLSB()** returns the LSB == precission of the calibration
+- **void setMaxCurrentShunt(float ampere = 20.0, float ohm = 0.002)** set the calibration register based upon the shunt and the max ampere. From this the LSB is derived. Note the function will round up the LSB to nearest round value.
+- **float getCurrentLSB()** returns the LSB == precision of the calibration
 
 
 ### Operating mode
@@ -159,7 +160,6 @@ See datasheet, not tested yet.
 The alert line falls when alert is reached.
 
 
-
 ### Meta information
 
 - **uint16_t getManufacturerID()** should return 0x5449
@@ -168,12 +168,16 @@ The alert line falls when alert is reached.
 
 ## Operational
 
-See examples..
-
-Not all examples are tested. 
+See examples.. 
 
 
 ## TODO
 
 - testtestestest
+- test functions
+- test examples
 - improve readme.md
+- "disconnected measurements"
+- negative current clipping => zero.
+- ...
+
