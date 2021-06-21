@@ -97,7 +97,7 @@ public:
   // Meta information
   uint16_t getManufacturerID();   // should return 0x5449
   uint16_t getDieID();            // should return 0x2260
-  // uint16_t getRegister(uint8_t reg)  { return _readRegister(reg); };
+  uint16_t getRegister(uint8_t reg)  { return _readRegister(reg); };
 
 private:
 
