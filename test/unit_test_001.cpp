@@ -92,6 +92,7 @@ unittest(test_core_functions)
 unittest(test_configuration)
 {
   INA226 INA(0x40);
+  // assertTrue(INA.begin());
 
   // only errors can be tested
   assertFalse(INA.setAverage(8));
@@ -108,6 +109,7 @@ unittest(test_configuration)
 unittest(test_calibration)
 {
   INA226 INA(0x40);
+  // assertTrue(INA.begin());
 
   // only errors can be tested
   assertFalse(INA.setMaxCurrentShunt(30));
@@ -123,6 +125,7 @@ unittest(test_calibration)
 unittest(test_setMode)
 {
   INA226 INA(0x40);
+  // assertTrue(INA.begin());
 
   // only errors can be tested
   assertFalse(INA.setMode(8));
