@@ -190,7 +190,7 @@ bool INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
   _maxCurrent = maxCurrent;
   _shunt = shunt;
 
-  _current_LSB = _maxCureent * 3.0517578125e-005;  // maxCurrent / 32768;
+  _current_LSB = _maxCurrent * 3.0517578125e-005;  // maxCurrent / 32768;
 
   // normalize the LSB to a round number
   // not sure is this is more accurate / precise
