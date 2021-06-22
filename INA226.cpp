@@ -221,7 +221,7 @@ bool INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
   // Serial.print("Calibration:\t");
   // Serial.println(calib);
 
-  _maxCurrent = _current_LSB / 3.0517578125e-5;
+  _maxCurrent = _current_LSB * 32768.0;
   _shunt = shunt;
   return true;
 }
