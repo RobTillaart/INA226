@@ -80,10 +80,12 @@ unittest(test_core_functions)
   assertTrue(INA.begin());
 
   // need mock up
+  /*
   fprintf(stderr, "%f\n", INA.getShuntVoltage());
   fprintf(stderr, "%f\n", INA.getBusVoltage());
   fprintf(stderr, "%f\n", INA.getPower());
   fprintf(stderr, "%f\n", INA.getCurrent());
+  */
 }
 
 
