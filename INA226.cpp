@@ -187,7 +187,7 @@ bool INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
 {
   if (maxCurrent > 20 || maxCurrent < 0.001) return false;
   if (shunt < 0.001) return false;
-  _maxCureent = maxCurrent;
+  _maxCurrent = maxCurrent;
   _shunt = shunt;
 
   _current_LSB = _maxCureent * 3.0517578125e-005;  // maxCurrent / 32768;
