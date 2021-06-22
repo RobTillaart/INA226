@@ -30,6 +30,28 @@ The sensor can have 16 different I2C addresses, which depends on how the A0 and 
 See datasheet - table 2 - datasheet.
 
 
+## About Measurements
+
+Some initial tests shows that the readings do not 100% add up. 
+I expect this is caused by fluctuations in my power supply used and
+more important that the ADC is multiplexed so there is time between the bus voltage measurement
+and the shunt voltage measurement. If the current has changed a bit these values are not necessary 
+in line.
+
+Did some measurements with a load of 194 ohm and a shunt of 0.002 ohm that is a factor 10e5
+Being on the edge of the sensitivity of the ADC measurements of current were up to ~9% too low.
+Possible cause is that some math is done in 16 bit so numbers are truncated, not rounded.
+
+(see issue #2) Sensors may have a different shunt resistor than the 0.002 I have. You should 
+always check and verify what is on the shunt and even verify with a DMM that this value is correct.
+With the calibration function **setMaxCurrentShunt()** one can just set the actual value and even
+compensate slightly if readings are structural too low or too high.
+
+I noted that the **getPower()** function does not always equal **getBusVoltage()** times **getCurrent()**
+Cause is rounding/truncing math and time of measurement.  You might prefer to multiply those values yourself 
+to get extra digits. Please be aware that more digits is not always more exact (think significant digits)
+
+
 ## Interface
 
 read datasheet for details
@@ -173,11 +195,12 @@ See examples..
 
 ## TODO
 
-- testtestestest
-- test functions
+- test different loads (low edge)
+- test unit tests
 - test examples
 - improve readme.md
-- "disconnected measurements"
+- disconnected load, can it be recognized?
 - negative current clipping => zero.
-- ...
-
+- **bool** setMaxCurrentShunt( , , bool normalize = true); add flag to normalize the LSB or not.
+  not is a bit faster and more exact, but can give a "not rounded" LSB value
+-
