@@ -26,6 +26,8 @@ getShuntVoltageConversionTime	KEYWORD2
 
 setMaxCurrentShunt	KEYWORD2
 getCurrentLSB	KEYWORD2
+getShunt	KEYWORD2
+getMaxCurrent	KEYWORD2
 
 setMode	KEYWORD2
 getMode	KEYWORD2

@@ -32,6 +32,8 @@ See datasheet - table 2 - datasheet.
 
 ## About Measurements
 
+Calibration is mandatory to get **getCurrent()** and **getPower()** to work.
+
 Some initial tests shows that the readings do not 100% add up. 
 I expect this is caused by fluctuations in my power supply used and
 more important that the ADC is multiplexed so there is time between the bus voltage measurement
@@ -48,7 +50,7 @@ With the calibration function **setMaxCurrentShunt()** one can just set the actu
 compensate slightly if readings are structural too low or too high.
 
 I noted that the **getPower()** function does not always equal **getBusVoltage()** times **getCurrent()**
-Cause is rounding/truncing math and time of measurement.  You might prefer to multiply those values yourself 
+Cause is rounding/trunking maths and time of measurement.  You might prefer to multiply those values yourself 
 to get extra digits. Please be aware that more digits is not always more exact (think significant digits)
 
 
@@ -86,14 +88,14 @@ the sensor. Also the value is not meaningful if there is no shunt connected.
 to be tested.
 
 - **void reset()** software power on reset
-- **void setAverage(uint8_t avg = 0)** see table below
-(0 = default ==> 1 read)
+- **bool setAverage(uint8_t avg = 0)** see table below
+(0 = default ==> 1 read), returns false if parameter > 7
 - **uint8_t getAverage()** returns the value set. Note this is not the count of samples.
-- **void setBusVoltageConversionTime(uint8_t bvct = 4)** see table below
-(4 = default ==> 1.1 ms)
+- **bool setBusVoltageConversionTime(uint8_t bvct = 4)** see table below
+(4 = default ==> 1.1 ms), returns false if parameter > 7
 - **uint8_t getBusVoltageConversionTime()** return the value set. Note this is not a unit of time.
-- **void setShuntVoltageConversionTime(uint8_t svct = 4)** see table below
-(4 = default ==> 1.1 ms)
+- **bool setShuntVoltageConversionTime(uint8_t svct = 4)** see table below
+(4 = default ==> 1.1 ms), returns false if parameter > 7
 - **uint8_t getShuntVoltageConversionTime()** return the value set. Note this is not a unit of time.
 
 
@@ -129,7 +131,9 @@ Note that total conversion time can take up to 1024 \* 8.3 ms ~ 10 seconds.
 
 See datasheet
 
-- **void setMaxCurrentShunt(float ampere = 20.0, float ohm = 0.002)** set the calibration register based upon the shunt and the max ampere. From this the LSB is derived. Note the function will round up the LSB to nearest round value.
+Calibration is mandatory to get **getCurrent()** and **getPower()** to work.
+
+- **bool setMaxCurrentShunt(float ampere = 20.0, float ohm = 0.002, bool normalize = true)** set the calibration register based upon the shunt and the max ampere. From this the LSB is derived. Note the function will round up the LSB to nearest round value by default. This may cause loss of precision.
 - **float getCurrentLSB()** returns the LSB == precision of the calibration
 
 
@@ -139,14 +143,14 @@ See datasheet, partially tested.
 
 Mode = 4 is not used, is also a **shutdown()** unknown if there is a difference.
 
-- **void setMode(uint8_t mode = 7)** mode = 0 .. 7
-- **void shutDown()** mode 0 - not tested yet
-- **void setModeShuntTrigger()** mode 1 - not tested yet - how to trigger to be investigated
-- **void setModeBusTrigger()** mode 2 - not tested yet -
-- **void setModeShuntBusTrigger()** mode 3 - not tested yet -
-- **void setModeShuntContinuous()** mode 5
-- **void setModeBusContinuous()** mode 6
-- **void setModeShuntBusContinuous()** mode 7 - default
+- **bool setMode(uint8_t mode = 7)** mode = 0 .. 7
+- **bool shutDown()** mode 0 - not tested yet
+- **bool setModeShuntTrigger()** mode 1 - not tested yet - how to trigger to be investigated
+- **bool setModeBusTrigger()** mode 2 - not tested yet -
+- **bool setModeShuntBusTrigger()** mode 3 - not tested yet -
+- **bool setModeShuntContinuous()** mode 5
+- **bool setModeBusContinuous()** mode 6
+- **bool setModeShuntBusContinuous()** mode 7 - default
 - **uint8_t getMode()** returns the mode (0..7) set by one of the functions above.
 
 
@@ -154,7 +158,7 @@ Mode = 4 is not used, is also a **shutdown()** unknown if there is a difference.
 
 See datasheet, not tested yet.
 
-- **void setAlertRegister(uint16_t mask)** by setting the mask one of five an over- or underflow can be detected. Another feature that can be set si the conversion ready flag.
+- **void setAlertRegister(uint16_t mask)** by setting the mask one of five an over- or underflow can be detected. Another feature that can be set is the conversion ready flag.
 - **uint16_t getAlertFlag()** returns the mask set by **setAlertRegister()**
 - **void setAlertLimit(uint16_t limit)** sets the limit that belongs to the chosen Alert Flag
 - **uint16_t getAlertLimit()** returns the limit set by **setAlertLimit()**
@@ -198,9 +202,12 @@ See examples..
 - test different loads (low edge)
 - test unit tests
 - test examples
+- investigate alert functions / interface
 - improve readme.md
 - disconnected load, can it be recognized?
-- negative current clipping => zero.
-- **bool** setMaxCurrentShunt( , , bool normalize = true); add flag to normalize the LSB or not.
-  not is a bit faster and more exact, but can give a "not rounded" LSB value
--
+- **lastError()** do we need this...
+- cache configuration ? ==> 2 bytes
+- getCurrentLSB_mA()
+- bool isCalibrated()
+
+
