@@ -39,6 +39,7 @@ void setup()
 void loop()
 {
   Serial.println("\nPOWER2 = busVoltage x current");
+  Serial.println(" V\t mA \t mW \t mW \t mW");
   Serial.println("BUS\tCURRENT\tPOWER\tPOWER2\tDELTA");
   for (int i = 0; i < 20; i++)
   {
