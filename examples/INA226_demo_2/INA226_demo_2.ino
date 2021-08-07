@@ -1,7 +1,7 @@
 //
 //    FILE: INA226_demo_2.ino
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.1
+// VERSION: 0.1.2
 // PURPOSE: demo
 //    DATE: 2021-06-21
 //     URL: https://github.com/RobTillaart/INA226
@@ -25,10 +25,13 @@ void setup()
   }
 
   Serial.println();
-  Serial.print("MAN:\t");
-  Serial.println(INA.getManufacturerID(), HEX);
-  Serial.print("DIE:\t");
-  Serial.println(INA.getDieID(), HEX);
+  //  Serial.print("AVG:\t");
+  //  Serial.println((int)INA.getAverage());
+  INA.setAverage(2);
+  //  Serial.print("MAN:\t");
+  //  Serial.println(INA.getManufacturerID(), HEX);
+  //  Serial.print("DIE:\t");
+  //  Serial.println(INA.getDieID(), HEX);
   delay(100);
 
   INA.setMaxCurrentShunt(1, 0.002);
@@ -58,7 +61,7 @@ void loop()
     Serial.print("\t");
     Serial.print((bv * cu) - po, 2);
     Serial.println();
-    delay(500);
+    delay(50);
   }
 }
 
