@@ -202,32 +202,49 @@ uint8_t INA226::getShuntVoltageConversionTime()
 //
 bool INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
 {
+  // #define printdebug true
+  uint32_t calib = 0;
+  uint32_t factor = 1;
+
   if ((maxCurrent > 20) || (maxCurrent < 0.001)) return false;
   if (shunt < 0.001) return false;
 
   _current_LSB = maxCurrent * 3.0517578125e-5;      // maxCurrent / 32768;
 
+  #ifdef printdebug
+    Serial.println();
+    Serial.print("normalize:\t");
+    Serial.println(normalize ? " true":" false");
+    Serial.print("initial current_LSB:\t");
+    Serial.print(_current_LSB, 8);
+    Serial.println(" uA / bit");
+  #endif
+
   // normalize the LSB to a round number
   // LSB will increase
   if (normalize)
   {
-    // Serial.print("current_LSB:\t");
-    // Serial.println(_current_LSB, 10);
-    uint32_t factor = 1;
+    calib = round(0.00512 / (_current_LSB * shunt));
+    _current_LSB = 0.00512 / (calib * shunt);
+
+    #ifdef printdebug
+      Serial.print("Prescale current_LSB:\t");
+      Serial.print(_current_LSB, 8);
+      Serial.println(" uA / bit");
+    #endif
+
+    // auto scale current_LSB
+    factor = 1;
     while (_current_LSB < 1)
     {
       _current_LSB *= 10;
       factor *= 10;
     }
     _current_LSB = 1.0 / factor;
-    // Serial.print("factor:\t");
-    // Serial.println(factor);
-    // Serial.print("current_LSB:\t");
-    // Serial.println(_current_LSB, 10);
   }
 
-  // auto-scale
-  uint32_t calib = round(0.00512 / (_current_LSB * shunt));
+  // auto scale calibration
+  calib = round(0.00512 / (_current_LSB * shunt));
   while (calib > 65535)
   {
     _current_LSB *= 10;
@@ -235,11 +252,25 @@ bool INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
   }
   _writeRegister(INA226_CALIBRATION, calib);
 
-  // Serial.print("Calibration:\t");
-  // Serial.println(calib);
-
   _maxCurrent = _current_LSB * 32768.0;
   _shunt = shunt;
+
+  #ifdef printdebug
+    Serial.print("factor:\t");
+    Serial.println(factor);
+    Serial.print("Final current_LSB:\t");
+    Serial.print(_current_LSB, 8);
+    Serial.println(" uA / bit");
+    Serial.print("Calibration:\t");
+    Serial.println(calib);
+    Serial.print("Max current:\t");
+    Serial.print(_maxCurrent);
+    Serial.println(" A");
+    Serial.print("Shunt:\t");
+    Serial.print(_shunt, 8);
+    Serial.println(" ohm");
+  #endif
+
   return true;
 }
 
