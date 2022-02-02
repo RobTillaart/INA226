@@ -260,7 +260,11 @@ See examples..
 - if **BVCT SVCT** is set to 6 or 7
   - does the long timing affects RTOS? ==> yield()
 - cache configuration ? ==> 2 bytes
-  - what is gained?
-  - 15 times used...
+  - what is gained? updates are faster.
+  - 15 times used, 
 - separate release notes.
-
+- can the calibration math be optimized
+  - integer only?
+  - less iterations?
+  - local var for current_lsb?
+  - ??
