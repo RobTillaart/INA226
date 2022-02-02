@@ -1,6 +1,6 @@
 //    FILE: INA266.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.1.6
+// VERSION: 0.2.0
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA266 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -16,6 +16,7 @@
 //  0.1.5   2021-11-05  update build-CI, add badges
 //                      fix address in constructor.
 //  0.1.6   2021-12-20  update library.json, license, minor edits
+//  0.2.0   2022-02-02  fix #11 normalize
 
 
 #include "INA226.h"
@@ -40,7 +41,7 @@ INA226::INA226(const uint8_t address, TwoWire *wire)
 {
   _address     = address;
   _wire        = wire;
-  // as these
+  // not calibrated values by default.
   _current_LSB = 0;
   _maxCurrent  = 0;
   _shunt       = 0;
@@ -128,7 +129,10 @@ void INA226::reset()
   uint16_t mask = _readRegister(INA226_CONFIGURATION);
   mask |= 0x800;
   _writeRegister(INA226_CONFIGURATION, mask);
-  // reset calibration?
+  // reset calibration
+  _current_LSB = 0;
+  _maxCurrent  = 0;
+  _shunt       = 0;
 }
 
 
@@ -198,7 +202,7 @@ uint8_t INA226::getShuntVoltageConversionTime()
 //
 bool INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
 {
-  if (maxCurrent > 20 || maxCurrent < 0.001) return false;
+  if ((maxCurrent > 20) || (maxCurrent < 0.001)) return false;
   if (shunt < 0.001) return false;
 
   _current_LSB = maxCurrent * 3.0517578125e-5;      // maxCurrent / 32768;
@@ -215,7 +219,9 @@ bool INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
       _current_LSB *= 10;
       factor *= 10;
     }
-    _current_LSB = 10.0 / factor;
+    _current_LSB = 1.0 / factor;
+    // Serial.print("factor:\t");
+    // Serial.println(factor);
     // Serial.print("current_LSB:\t");
     // Serial.println(_current_LSB, 10);
   }
