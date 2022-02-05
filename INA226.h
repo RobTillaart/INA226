@@ -1,9 +1,9 @@
 #pragma once
-//    FILE: INA266.h
+//    FILE: INA226.h
 //  AUTHOR: Rob Tillaart
 // VERSION: 0.2.0
 //    DATE: 2021-05-18
-// PURPOSE: Arduino library for INA266 power sensor
+// PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
 //
 //  Read the datasheet for the details
