@@ -17,6 +17,7 @@
 //                      fix address in constructor.
 //  0.1.6   2021-12-20  update library.json, license, minor edits
 //  0.2.0   2022-02-02  fix #11 normalize
+//                      fix #13 simplify sign handling shunt and current
 
 
 #include "INA226.h"
@@ -80,14 +81,7 @@ bool INA226::isConnected()
 //
 float INA226::getShuntVoltage()
 {
-  uint16_t val = _readRegister(INA226_SHUNT_VOLTAGE);
-  if (val & 0x8000)
-  {
-    val = val & 0x7FFF;
-    val = val ^ 0x7FFF;
-    val++;
-    return val * -2.5e-6;
-  }
+  int16_t val = _readRegister(INA226_SHUNT_VOLTAGE);
   return val * 2.5e-6;   // fixed 2.50 uV
 }
 
@@ -108,14 +102,7 @@ float INA226::getPower()
 
 float INA226::getCurrent()
 {
-  uint16_t val = _readRegister(INA226_CURRENT);
-  if (val & 0x8000)
-  {
-    val = val & 0x7FFF;
-    val = val ^ 0x7FFF;
-    val++;
-    return val * -_current_LSB;
-  }
+  int16_t val = _readRegister(INA226_CURRENT);
   return val * _current_LSB;
 }
 
