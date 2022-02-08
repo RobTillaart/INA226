@@ -7,6 +7,7 @@
 ## 0.2.0   2022-02-02
 - fix #11 normalize
 - fix #13 simplify sign handling shunt and current
+- add releaseNotes.md
 
 ## 0.1.6   2021-12-20
 - update library.json, 
