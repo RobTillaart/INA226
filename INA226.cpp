@@ -5,19 +5,7 @@
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
 //
-//  HISTORY:
-//  0.1.0   2021-05-18  initial version
-//  0.1.1   2021-06-21  improved calibration + added functions
-//  0.1.2   2021-06-22  add check of parameters of several functions + unit tests
-//                      add getShunt(), getMaxCurrent()
-//  0.1.3   2021-06-22  add getCurrentLSB_uA() + improve examples
-//                      fix for calibration
-//  0.1.4   2021-08-07  fix getCurrent()
-//  0.1.5   2021-11-05  update build-CI, add badges
-//                      fix address in constructor
-//  0.1.6   2021-12-20  update library.json, license, minor edits
-//  0.2.0   2022-02-02  fix #11 normalize
-//                      fix #13 simplify sign handling shunt and current
+//  HISTORY: see releaseNotes.md
 
 
 #include "INA226.h"
