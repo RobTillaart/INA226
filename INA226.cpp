@@ -71,7 +71,7 @@ bool INA226::isConnected()
 }
 
 
-uint8_t  getAddress()
+uint8_t INA226::getAddress()
 {
   return _address;
 };
