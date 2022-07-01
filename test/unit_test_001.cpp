@@ -75,9 +75,19 @@ unittest(test_constants)
 }
 
 
+unittest(test_constructor)
+{
+  INA226 INA(0x40);
+  assertEqual(0x40, INA.getAddress());
+
+  // assertTrue(INA.begin());
+}
+
+
 unittest(test_core_functions)
 {
   INA226 INA(0x40);
+
   // assertTrue(INA.begin());
 
   fprintf(stderr, "need mock up\n");

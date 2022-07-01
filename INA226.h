@@ -44,6 +44,7 @@ public:
 #endif
   bool     begin();
   bool     isConnected();
+  uint8_t  getAddress();
 
 
   // Core functions

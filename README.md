@@ -85,6 +85,7 @@ Returns true if the INA226 address is on the I2C bus.
 - **bool begin()** UNO ea. initializes the class. 
 returns true if the INA226 address is on the I2C bus.
 - **bool isConnected()** returns true if the INA226 address is on the I2C bus.
+- **uint8_t getAddress()** returns the address set in the constructor.
 
 
 ### Core Functions

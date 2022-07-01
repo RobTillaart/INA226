@@ -71,6 +71,12 @@ bool INA226::isConnected()
 }
 
 
+uint8_t  getAddress()
+{
+  return _address;
+};
+
+
 ////////////////////////////////////////////////////////
 //
 // Core functions

@@ -5,6 +5,7 @@
 
 ## 0.3.0   2022-07-01
 - fix #14 RESET FLAG
+- add getAddress()
 
 
 ## 0.2.0   2022-02-02
