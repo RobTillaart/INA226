@@ -53,6 +53,7 @@ unittest(test_constructor)
 
   assertTrue(INA.begin());
   assertTrue(INA.isConnected());
+  assertEqual(0x40, INA.getAddress());
 
   assertFalse(INA.isCalibrated());
 }
@@ -72,15 +73,6 @@ unittest(test_constants)
   assertEqual(0x0004, INA226_MATH_OVERFLOW_FLAG);
   assertEqual(0x0002, INA226_ALERT_POLARITY_FLAG);
   assertEqual(0x0001, INA226_ALERT_LATCH_ENABLE_FLAG);
-}
-
-
-unittest(test_constructor)
-{
-  INA226 INA(0x40);
-  assertEqual(0x40, INA.getAddress());
-
-  // assertTrue(INA.begin());
 }
 
 
