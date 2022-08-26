@@ -155,8 +155,10 @@ Note the value returned is not a unit of time.
 |    6      |  4.2 ms   |
 |    7      |  8.3 ms   |
 
+Note: times are typical, check datasheet for operational range.
+(max is ~10% higher)
 
-Note that total conversion time can take up to 1024 \* 8.3 ms ~ 10 seconds.
+Note: total conversion time can take up to 1024 \* 8.3 ms ~ 10 seconds.
 
 
 ### Calibration
@@ -179,6 +181,16 @@ The user **must** check the return value == true, otherwise the calibration regi
 - **float getMaxCurrent()** returns the value for the maxCurrent which can be corrected.
 
 To print these values one might use https://github.com/RobTillaart/printHelpers 
+
+
+#### Error codes setMaxCurrentShunt
+
+| descriptive name error       | value  | meaning |
+|:-----------------------------|-------:|:--------|
+| INA226_ERR_NONE              | 0x0000 | OK
+| INA226_ERR_SHUNTVOLTAGE_HIGH | 0x8000 | maxCurrent \* shunt > 80 mV 
+| INA226_ERR_MAXCURRENT_LOW    | 0x8001 | maxCurrent < 0.001
+| INA226_ERR_SHUNT_LOW         | 0x8002 | shunt      < 0.001
 
 
 ### Operating mode
@@ -250,25 +262,42 @@ See examples..
 
 ## Future
 
-- test different loads (low edge)
-- expand unit tests possible?
-- test examples
-- investigate alert functions / interface
-- disconnected load, 
+#### Should
+
+- test different loads (low edge).
+- test examples.
+- investigate alert functions / interface.
+- disconnected load.
   - can it be recognized? => current drop?
-- **lastError()** do we need this
-- if **BVCT SVCT** is set to 6 or 7
-  - does the long timing affects RTOS? ==> yield()
-- cache configuration ? ==> 2 bytes
-  - what is gained? updates are faster.
-  - 15 times used, 
-- can the calibration math be optimized
+
+
+#### Could
+
+- can the calibration math be optimized?
   - integer only?
   - less iterations?
-  - local var for current_lsb?
   - ??
 - make defines of "magic" numbers
+  - const floats (most used only once)
+
+
+#### Won't
+
+- **lastError()** do we need this?
+  - no
+- if **BVCT SVCT** is set to 6 or 7
+  - does the long timing affects RTOS? ==> yield()
+  - wait for issue
+- expand unit tests possible?
+  - need virtual device => too much work
+- cache configuration ? ==> 2 bytes.
+  - what is gained? updates are faster. footprint code?
+  - how often operational?
+  - 15 times used..
+  
 
 ## Resources
+
 - [TI - INA226 Details](https://www.ti.com/product/INA226#params)
 - [TI - INA226 datasheet](https://www.ti.com/document-viewer/INA226/datasheet)
+
