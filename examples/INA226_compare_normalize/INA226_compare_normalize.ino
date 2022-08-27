@@ -1,5 +1,5 @@
 //
-//    FILE: INA226_compare_normailize.ino
+//    FILE: INA226_compare_normalize.ino
 //  AUTHOR: Rob Tillaart
 // PURPOSE: show difference in normalize flag
 //     URL: https://github.com/RobTillaart/INA226
