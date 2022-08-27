@@ -169,10 +169,8 @@ Calibration is mandatory to get **getCurrent()** and **getPower()** to work.
 
 - **bool setMaxCurrentShunt(float ampere = 20.0, float ohm = 0.002, bool normalize = true)** 
 set the calibration register based upon the shunt and the max ampere. 
-From this the LSB is derived. 
-Note the function will round up the LSB to nearest round value by default. 
-This may cause loss of precision. The function may force normalization if underflow detected.
-The user **must** check the return value == true, otherwise the calibration register is **not** set.
+From this the LSB is derived.
+The function may force normalization if underflow is detected.
 - **bool isCalibrated()** returns true if CurrentLSB has been calculated by **setMaxCurrentShunt()**. 
 - **float getCurrentLSB()** returns the LSB in Ampere == precision of the calibration.
 - **float getCurrentLSB_mA()** returns the LSB in milliampere.
@@ -180,7 +178,16 @@ The user **must** check the return value == true, otherwise the calibration regi
 - **float getShunt()** returns the value set for the shunt.
 - **float getMaxCurrent()** returns the value for the maxCurrent which can be corrected.
 
-To print these values one might use https://github.com/RobTillaart/printHelpers 
+To print these values in scientific notation use https://github.com/RobTillaart/printHelpers 
+
+
+#### About normalization
+
+**setMaxCurrentShunt()** will round the LSB to nearest round value (typical 0.001) by default (normalize == true). 
+- The user **must** check the return value == 0x000, otherwise the calibration register is **not** set.
+- Normalization typically gives smaller steps => improve precision
+- Normalization can cause that the maxCurrent passed cannot be reached any more.
+Solution is not to normalize if this max range is needed. 
 
 
 #### Error codes setMaxCurrentShunt
