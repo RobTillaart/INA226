@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - minor edit unit test
 
 
-## [0.4.0   2022-08-26
+## [0.4.0] - 2022-08-26
 - fix #16 - change error to warning for max current
   setMaxCurrentShunt now returns an int indicating OK == 0
   otherwise error. See INA226.h for error codes.
