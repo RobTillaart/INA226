@@ -205,34 +205,32 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
     Serial.print("normalize:\t");
     Serial.println(normalize ? " true":" false");
     Serial.print("initial current_LSB:\t");
-    Serial.print(_current_LSB, 8);
+    Serial.print(_current_LSB * 1e+6, 1);
     Serial.println(" uA / bit");
   #endif
 
   uint32_t calib  = 0;
-  uint32_t factor = 1;
+  uint8_t factor = 1;
+  float currentLSB = 0;
 
   //  normalize the LSB to a round number
   //  LSB will increase
   if (normalize)
   {
-    calib = round(0.00512 / (_current_LSB * shunt));
-    _current_LSB = 0.00512 / (calib * shunt);
-
-    #ifdef printdebug
-      Serial.print("Prescale current_LSB:\t");
-      Serial.print(_current_LSB, 8);
-      Serial.println(" uA / bit");
-    #endif
-
-    //  auto scale current_LSB
-    factor = 1;
-    while (_current_LSB < 1)
-    {
-      _current_LSB *= 10;
-      factor *= 10;
+    if (_current_LSB <= 10e-6 ) {
+      factor = 1;                         // 2.5uA, 5uA, 7.5uA, 10uA
+    }else if (_current_LSB <= 10e-5 ) {
+      factor = 10;                        // 25uA, 50uA, 75uA, 100uA
+    }else {
+        factor = 100;                     // 250uA, 500uA, 750uA, 1mA, ...
     }
-    _current_LSB = 1.0 / factor;
+    
+    currentLSB = INA226_CURRENTLSB_FACTOR * 1e-6 * factor;
+    
+    while( currentLSB < _current_LSB ) {
+        currentLSB = currentLSB + INA226_CURRENTLSB_FACTOR * 1e-6 * factor;    
+    }
+    _current_LSB = currentLSB;
   }
 
   //  auto scale calibration
@@ -251,16 +249,16 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
     Serial.print("factor:\t");
     Serial.println(factor);
     Serial.print("Final current_LSB:\t");
-    Serial.print(_current_LSB, 8);
+    Serial.print(_current_LSB * 1e+6, 1);
     Serial.println(" uA / bit");
     Serial.print("Calibration:\t");
     Serial.println(calib);
     Serial.print("Max current:\t");
-    Serial.print(_maxCurrent);
+    Serial.print(_maxCurrent, 3);
     Serial.println(" A");
     Serial.print("Shunt:\t");
-    Serial.print(_shunt, 8);
-    Serial.println(" ohm");
+    Serial.print(_shunt, 4);
+    Serial.println(" Ohm");
     Serial.print("ShuntV:\t");
     Serial.print(shuntVoltage, 4);
     Serial.println(" Volt");

@@ -42,6 +42,12 @@
 //  See issue #26
 #define INA226_MINIMAL_SHUNT             (0.001)
 
+// set normalization factor for currentLSB in setMaxCurrentShunt
+// 2.5 ... 2.5, 5.0, 7.5, 10.0, 25, 50, 75, 100, 250, ... 1000 [uA] 
+// 5.0 ... 5.0, 10, 50, 100, 500, 1000 [uA]
+// 10.0 ... 10, 100, 1000 [uA]
+// do not use other values than 2.5, 5.0 or 10.0 
+#define INA226_CURRENTLSB_FACTOR        2.5
 
 class INA226
 {
@@ -91,7 +97,7 @@ public:
   //  shunt * maxCurrent < 81 mV
   //  maxCurrent >= 0.001
   //  shunt      >= 0.001
-  int      setMaxCurrentShunt(float macCurrent = 20.0,
+  int      setMaxCurrentShunt(float maxCurrent = 20.0,
                               float shunt = 0.002,
                               bool normalize = true);
   bool     isCalibrated()     { return _current_LSB != 0.0; };
