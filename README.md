@@ -73,8 +73,9 @@ See datasheet - table 2 - datasheet.
 To be elaborated, example sketch available.
 
 (From Datasheet)  
-_The INA226 supports the transmission protocol for fast mode (1 kHz to 400 kHz) and high-speed mode (1 kHz to
-2.94 MHz). All data bytes are transmitted most significant byte first._
+_The INA226 supports the transmission protocol for fast mode (1 kHz to 400 kHz) 
+and high-speed mode (1 kHz to 2.94 MHz).
+All data bytes are transmitted most significant byte first._
 
 
 ## About Measurements
@@ -106,6 +107,8 @@ The example sketch **INA226_setMaxCurrentShunt.ino** switches between two calibr
 It shows the **INA266** sensor needs time to accommodate to this change. 
 In practice you should call **setMaxCurrentShunt()** only once in **setup()**.
 
+Also see #30 for another typical deviation problem.
+
 
 ## Interface
 
@@ -135,6 +138,8 @@ Also the value is not meaningful if there is no shunt connected.
 - **float getCurrent()** is the current through the shunt in Ampere.
 - **float getPower()** is the current x BusVoltage in Watt.
 
+The library has helper functions to convert above output to a more appropriate scale of units.
+
 Helper functions for the milli scale.
 
 - **float getBusVoltage_mV()** idem, in milliVolts.
@@ -144,7 +149,7 @@ Helper functions for the milli scale.
 
 Helper functions for the micro scale.
 
-- **float getBusVoltage_mV()** idem, in microVolts.
+- **float getBusVoltage_uV()** idem, in microVolts.
 - **float getShuntVoltage_uV()** idem, in microVolts.
 - **float getCurrent_uA()** idem, in microAmpere.
 - **float getPower_uW()** idem, in microWatt.
@@ -249,7 +254,12 @@ See datasheet, partially tested.
 
 Mode = 4 is not used, is also a **shutdown()** unknown if there is a difference with mode == 0.
 
-- **bool setMode(uint8_t mode = 7)** mode = 0 .. 7
+- **bool setMode(uint8_t mode = 7)** mode = 0..7.
+The value 7 == ShuntBusContinuous mode.
+- **uint8_t getMode()** returns the mode (0..7).
+
+Descriptive mode functions (convenience wrappers).
+
 - **bool shutDown()** mode 0 - not tested yet
 - **bool setModeShuntTrigger()** mode 1 - not tested yet - how to trigger to be investigated
 - **bool setModeBusTrigger()** mode 2 - not tested yet
@@ -257,7 +267,6 @@ Mode = 4 is not used, is also a **shutdown()** unknown if there is a difference 
 - **bool setModeShuntContinuous()** mode 5
 - **bool setModeBusContinuous()** mode 6
 - **bool setModeShuntBusContinuous()** mode 7 - default.
-- **uint8_t getMode()** returns the mode (0..7) set by one of the functions above.
 
 
 #### Alert functions

@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.5.0] - 2023-12-04
-- Fix #31, refactor API
+- Fix #31, refactor API - support ESP32-S3
 - update readme.md
+- update examples
 
 ----
 
