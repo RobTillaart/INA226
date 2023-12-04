@@ -6,10 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.5.0] - 2023-12-04
+- Fix #31, refactor API
+- update readme.md
+
+----
+
 ## [0.4.4] - 2023-09-23
 - add Wire1 support for ESP32
 - update readme.md
-
 
 ## [0.4.3] - 2023-05-07
 - add constant INA226_MINIMAL_SHUNT
