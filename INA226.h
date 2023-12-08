@@ -37,17 +37,10 @@
 #define INA226_ERR_SHUNTVOLTAGE_HIGH     0x8000
 #define INA226_ERR_MAXCURRENT_LOW        0x8001
 #define INA226_ERR_SHUNT_LOW             0x8002
-
+#define INA226_ERR_NORMALIZE_FAILED      0x8003
 
 //  See issue #26
 #define INA226_MINIMAL_SHUNT             (0.001)
-
-// set normalization factor for currentLSB in setMaxCurrentShunt
-// 2.5 ... 2.5, 5.0, 7.5, 10.0, 25, 50, 75, 100, 250, ... 1000 [uA] 
-// 5.0 ... 5.0, 10, 50, 100, 500, 1000 [uA]
-// 10.0 ... 10, 100, 1000 [uA]
-// do not use other values than 2.5, 5.0 or 10.0 
-#define INA226_CURRENTLSB_FACTOR        2.5
 
 class INA226
 {
