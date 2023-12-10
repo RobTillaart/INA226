@@ -1,7 +1,7 @@
 #pragma once
 //    FILE: INA226.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.5.0
+// VERSION: 0.5.1
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -14,7 +14,7 @@
 #include "Wire.h"
 
 
-#define INA226_LIB_VERSION              (F("0.5.0"))
+#define INA226_LIB_VERSION              (F("0.5.1"))
 
 
 //  set by setAlertRegister
@@ -41,6 +41,7 @@
 
 //  See issue #26
 #define INA226_MINIMAL_SHUNT             (0.001)
+
 
 class INA226
 {

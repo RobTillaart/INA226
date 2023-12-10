@@ -1,6 +1,6 @@
 //    FILE: INA226.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.5.0
+// VERSION: 0.5.1
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -178,6 +178,8 @@ uint8_t INA226::getShuntVoltageConversionTime()
 //
 int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
 {
+  //  https://github.com/RobTillaart/INA226/pull/29
+
   //  #define printdebug true
 
   //  fix #16 - datasheet 6.5 Electrical Characteristics
@@ -202,7 +204,9 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
   //  LSB will increase
   if (normalize)
   {
-    /* check if maxCurrent (normal) or shunt resistor (due to unusual low resistor values in relation to maxCurrent) determines currentLSB
+    /*
+       check if maxCurrent (normal) or shunt resistor 
+       (due to unusual low resistor values in relation to maxCurrent) determines currentLSB
        we have to take the upper value for currentLSB
     
        calculation of currentLSB based on shunt resistor and calibration register limits (2 bytes)
@@ -214,7 +218,7 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
        currentLSB(min) ~= 1e-5 / 2^7 / shunt
        currentLSB(min) ~= 7.8125e-8 / shunt 
     */
-    if(  7.8125e-8 / shunt > _current_LSB ) {
+    if ( 7.8125e-8 / shunt > _current_LSB ) {
       // shunt resistor determines currentLSB -> take this a starting point for currentLSB
       _current_LSB = 7.8125e-8 / shunt;
     }
@@ -225,31 +229,31 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
       Serial.println(" uA / bit");
     #endif
 
-    // normalize _current_LSB to a value of 1, 2 or 5 * 1e-6 to 1e-3
-    // convert float to int
+    //  normalize _current_LSB to a value of 1, 2 or 5 * 1e-6 to 1e-3
+    //  convert float to int
     uint16_t currentLSB_uA = float(_current_LSB * 1e+6);
-    currentLSB_uA++; // ceil would be more precise, but uses 176 bytes of flash
+    currentLSB_uA++;  //  ceil() would be more precise, but uses 176 bytes of flash.
 
-    uint16_t factor = 1;  // 1u to 1000u
-    uint8_t i = 0;        // 1 byte loop reduces footprint
+    uint16_t factor = 1;  //  1uA to 1000uA
+    uint8_t i = 0;        //  1 byte loop reduces footprint
     bool result = false;
-    do{
-      if( 1*factor >= currentLSB_uA){
-        _current_LSB = 1*factor * 1e-6;
+    do {
+      if ( 1 * factor >= currentLSB_uA) {
+        _current_LSB = 1 * factor * 1e-6;
         result = true;
-      }else if( 2*factor >= currentLSB_uA){
-        _current_LSB = 2*factor * 1e-6;
+      } else if ( 2 * factor >= currentLSB_uA) {
+        _current_LSB = 2 * factor * 1e-6;
         result = true;
-      }else if( 5*factor >= currentLSB_uA){
-        _current_LSB = 5*factor * 1e-6;
+      } else if ( 5 * factor >= currentLSB_uA) {
+        _current_LSB = 5 * factor * 1e-6;
         result = true;
-      }else {
+      } else {
         factor *= 10;
         i++;
       }
-    }while(i < 4 and !result); // 10^4 
+    } while( (i < 4) && (!result) );  //  factor < 10000 
 
-    if(!result) {
+    if (result == false) {  //  not succeeded to normalize.
       _current_LSB = 0;
       return INA226_ERR_NORMALIZE_FAILED;
     }
@@ -262,7 +266,7 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
     // done
   }
 
-  //  auto scale calibration
+  //  auto scale calibration if needed.
   uint32_t calib = round(0.00512 / (_current_LSB * shunt));
   while (calib > 65535)
   {
