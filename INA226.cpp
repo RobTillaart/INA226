@@ -232,23 +232,24 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
 
     uint16_t factor = 1;  // 1u to 1000u
     uint8_t i = 0;        // 1 byte loop reduces footprint
+    bool result = false;
     do{
       if( 1*factor >= currentLSB_uA){
         _current_LSB = 1*factor * 1e-6;
-        i=0xFF;
+        result = true;
       }else if( 2*factor >= currentLSB_uA){
         _current_LSB = 2*factor * 1e-6;
-        i=0xFF;
+        result = true;
       }else if( 5*factor >= currentLSB_uA){
         _current_LSB = 5*factor * 1e-6;
-        i=0xFF;
+        result = true;
       }else {
         factor *= 10;
         i++;
       }
-    }while(i < 4); // 10^4 
+    }while(i < 4 and !result); // 10^4 
 
-    if(i != 0xFF) {
+    if(!result) {
       _current_LSB = 0;
       return INA226_ERR_NORMALIZE_FAILED;
     }
@@ -266,7 +267,7 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
   while (calib > 65535)
   {
     _current_LSB *= 2;
-    calib = calib >> 1;
+    calib >>= 1;
   }
   _writeRegister(INA226_CALIBRATION, calib);
 
