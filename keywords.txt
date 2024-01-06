@@ -14,6 +14,7 @@ getShuntVoltage	KEYWORD2
 getBusVoltage	KEYWORD2
 getPower	KEYWORD2
 getCurrent	KEYWORD2
+isConversionReady	KEYWORD2
 
 getBusVoltage_mV	KEYWORD2
 getShuntVoltage_mV	KEYWORD2

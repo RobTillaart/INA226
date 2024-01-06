@@ -6,12 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.5.2] - 2024-01-06
+- fix #35 add **bool isReady()**
+  - thanks to Henk Holdijk
+
+
 ## [0.5.1] - 2023-12-10
 - reimplementation of **setMaxCurrentShunt()**, 
   - thanks to tileiar
 - update readme.md
 - minor edits
-
 
 ## [0.5.0] - 2023-12-04
 - Fix #31, refactor API - support ESP32-S3

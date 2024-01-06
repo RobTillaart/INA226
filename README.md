@@ -137,6 +137,7 @@ Also the value is not meaningful if there is no shunt connected.
 - **float getBusVoltage()** idem. in volts. Max 36 Volt.
 - **float getCurrent()** is the current through the shunt in Ampere.
 - **float getPower()** is the current x BusVoltage in Watt.
+- **bool isConversionReady()** returns true if conversion ready flag is set.
 
 The library has helper functions to convert above output to a more appropriate scale of units.
 
@@ -361,6 +362,8 @@ See examples..
   - can it be recognized? => current drop?
 
 #### Could
+
+- clean up magic numbers in the code
 
 
 #### Won't

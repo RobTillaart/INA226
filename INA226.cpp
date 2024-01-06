@@ -1,6 +1,6 @@
 //    FILE: INA226.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.5.1
+// VERSION: 0.5.2
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -93,6 +93,13 @@ float INA226::getCurrent()
 {
   int16_t val = _readRegister(INA226_CURRENT);
   return val * _current_LSB;
+}
+
+
+bool INA226::isConversionReady()
+{
+  uint16_t mask = _readRegister(INA226_MASK_ENABLE);
+  return (mask & INA226_CONVERSION_READY_FLAG) == INA226_CONVERSION_READY_FLAG;
 }
 
 
