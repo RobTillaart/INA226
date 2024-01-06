@@ -42,6 +42,8 @@
 //  See issue #26
 #define INA226_MINIMAL_SHUNT             (0.001)
 
+#define INA226_MAX_WAIT_MS               1000
+
 
 class INA226
 {
@@ -59,7 +61,9 @@ public:
   float    getShuntVoltage();     //  Volt
   float    getCurrent();          //  Ampere
   float    getPower();            //  Watt
+  //  See #35
   bool     isConversionReady();   //  conversion ready flag is set.
+  bool     waitConversionReady(uint32_t timeout = INA226_MAX_WAIT_MS);
 
 
   //  Scale helpers milli range

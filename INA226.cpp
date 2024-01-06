@@ -103,6 +103,17 @@ bool INA226::isConversionReady()
 }
 
 
+bool INA226::waitConversionReady(uint32_t timeout)
+{
+  uint32_t start = millis();
+  while ( (millis() - start) <= timeout) 
+  {
+    if (isConversionReady()) return true;
+   delay(1);  //  implicit yield();
+  }
+  return false;
+}
+
 ////////////////////////////////////////////////////////
 //
 //  Configuration
