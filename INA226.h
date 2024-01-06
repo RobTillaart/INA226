@@ -14,7 +14,7 @@
 #include "Wire.h"
 
 
-#define INA226_LIB_VERSION              (F("0.5.2"))
+#define INA226_LIB_VERSION              "0.5.2"
 
 
 //  set by setAlertRegister
@@ -40,9 +40,9 @@
 #define INA226_ERR_NORMALIZE_FAILED      0x8003
 
 //  See issue #26
-#define INA226_MINIMAL_SHUNT             (0.001)
+#define INA226_MINIMAL_SHUNT             0.001
 
-#define INA226_MAX_WAIT_MS               1000
+#define INA226_MAX_WAIT_MS               600   //  millis
 
 
 class INA226
