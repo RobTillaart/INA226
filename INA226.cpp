@@ -1,6 +1,6 @@
 //    FILE: INA226.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.5.1
+// VERSION: 0.5.2
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -9,24 +9,95 @@
 #include "INA226.h"
 
 //  REGISTERS
-#define INA226_CONFIGURATION        0x00
-#define INA226_SHUNT_VOLTAGE        0x01
-#define INA226_BUS_VOLTAGE          0x02
-#define INA226_POWER                0x03
-#define INA226_CURRENT              0x04
-#define INA226_CALIBRATION          0x05
-#define INA226_MASK_ENABLE          0x06
-#define INA226_ALERT_LIMIT          0x07
-#define INA226_MANUFACTURER         0xFE
-#define INA226_DIE_ID               0xFF
-
+#define INA226_CONFIGURATION            ( 0x00 )
+#define INA226_SHUNT_VOLTAGE            ( 0x01 )
+#define INA226_BUS_VOLTAGE              ( 0x02 )
+#define INA226_POWER                    ( 0x03 )
+#define INA226_CURRENT                  ( 0x04 )
+#define INA226_CALIBRATION              ( 0x05 )
+#define INA226_MASK_ENABLE              ( 0x06 )
+#define INA226_ALERT_LIMIT              ( 0x07 )
+#define INA226_MANUFACTURER             ( 0xFE )
+#define INA226_DIE_ID                   ( 0xFF )
 
 //  CONFIGURATION MASKS
-#define INA226_CONF_RESET_MASK      0x8000
-#define INA226_CONF_AVERAGE_MASK    0x0E00
-#define INA226_CONF_BUSVC_MASK      0x01C0
-#define INA226_CONF_SHUNTVC_MASK    0x0038
-#define INA226_CONF_MODE_MASK       0x0007
+#define INA226_CONF_RESET_MASK          ( 0x8000 )
+#define INA226_CONF_AVERAGE_MASK        ( 0x0E00 )
+#define INA226_CONF_BUSVC_MASK          ( 0x01C0 )
+#define INA226_CONF_SHUNTVC_MASK        ( 0x0038 )
+#define INA226_CONF_MODE_MASK           ( 0x0007 )
+
+//  set by setAlertRegister
+#define INA226_SHUNT_OVER_VOLTAGE       ( 0x8000 )
+#define INA226_SHUNT_UNDER_VOLTAGE      ( 0x4000 )
+#define INA226_BUS_OVER_VOLTAGE         ( 0x2000 )
+#define INA226_BUS_UNDER_VOLTAGE        ( 0x1000 )
+#define INA226_POWER_OVER_LIMIT         ( 0x0800 )
+#define INA226_CONVERSION_READY         ( 0x0400 )
+
+//  returned by getAlertFlag
+#define INA226_ALERT_FUNCTION_FLAG      ( 0x0010 )
+#define INA226_CONVERSION_READY_FLAG    ( 0x0008 )
+#define INA226_MATH_OVERFLOW_FLAG       ( 0x0004 )
+#define INA226_ALERT_POLARITY_FLAG      ( 0x0002 )
+#define INA226_ALERT_LATCH_ENABLE_FLAG  ( 0x0001 )
+
+//  returned by setMaxCurrentShunt
+#define INA226_ERR_NONE                 ( 0x0000 )
+#define INA226_ERR_SHUNTVOLTAGE_HIGH    ( 0x8000 )
+#define INA226_ERR_MAXCURRENT_LOW       ( 0x8001 )
+#define INA226_ERR_SHUNT_LOW            ( 0x8002 )
+#define INA226_ERR_NORMALIZE_FAILED     ( 0x8003 )
+#define INA226_ERR_WRITE_REG_FAILED     ( 0x8004 )
+
+
+//  AVG SETTING TO VALUE CONVERSION ARRAY
+const uint16_t INA226_AVERAGE[] = {
+    1,      // INA226_NO_AVERAGE
+    4,      // INA226_AVERAGE_4_SAMPLES
+    16,     // INA226_AVERAGE_16_SAMPLES
+    64,     // INA226_AVERAGE_64_SAMPLES
+    128,    // INA226_AVERAGE_128_SAMPLES
+    256,    // INA226_AVERAGE_256_SAMPLES
+    512,    // INA226_AVERAGE_512_SAMPLES
+    1024    // INA226_AVERAGE_1024_SAMPLES
+    };
+
+//  VBUS & VSHunt CONVERSION TIME SETTING TO VALUE CONVERSION ARRAY
+const uint16_t INA226_CT_US[] = {
+    140,    // INA226_CT_SETTING_140_US
+    204,    // INA226_CT_SETTING_204_US
+    332,    // INA226_CT_SETTING_332_US
+    588,    // INA226_CT_SETTING_588_US
+    1100,   // INA226_CT_SETTING_1100_US
+    2116,   // INA226_CT_SETTING_2116_US
+    4156,   // INA226_CT_SETTING_4156_US
+    8244    // INA226_CT_SETTING_8244_US
+    };
+
+//  MODE SETTING TO VBUS MEASUREMENT OR NOT MAPPING ARRAY
+const bool INA226_VBUS_MEASUREMENT[] = {
+    false,  // INA226_POWERDOWN_MODE / INA226_SHUTDOWN_MODE
+    false,  // INA226_SHUNTTRIGGER_MODE
+    true,   // INA226_BUSTRIGGER_MODE
+    true,   // INA226_SHUNTBUSTRIGGER_MODE
+    false,  // "INA226_POWERDOWN_MODE / INA226_SHUTDOWN_MODE"
+    false,  // INA226_SHUNTCONTINUOUS_MODE
+    true,   // INA226_BUSCONTINUOUS_MODE
+    true    // INA226_SHUNTBUSCONTINUOUS_MODE
+    };
+
+//  MODE SETTING TO VSHUNT MEASUREMENT OR NOT MAPPING ARRAY
+const bool INA226_VSH_MEASUREMENT[] = {
+    false,  // INA226_POWERDOWN_MODE / INA226_SHUTDOWN_MODE
+    true,   // INA226_SHUNTTRIGGER_MODE
+    false,  // INA226_BUSTRIGGER_MODE
+    true,   // INA226_SHUNTBUSTRIGGER_MODE
+    false,  // "INA226_POWERDOWN_MODE / INA226_SHUTDOWN_MODE"
+    true,   // INA226_SHUNTCONTINUOUS_MODE
+    false,  // INA226_BUSCONTINUOUS_MODE
+    true    // INA226_SHUNTBUSCONTINUOUS_MODE
+    };
 
 
 ////////////////////////////////////////////////////////
@@ -41,6 +112,11 @@ INA226::INA226(const uint8_t address, TwoWire *wire)
   _current_LSB = 0;
   _maxCurrent  = 0;
   _shunt       = 0;
+  //  Default mode, conversion time and average (see Datasheet)
+  _mode        = INA226_SHUNTBUSCONTINUOUS_MODE;
+  _avg         = INA226_NO_AVERAGE;
+  _bvct        = INA226_CT_SETTING_1100_US;
+  _svct        = INA226_CT_SETTING_1100_US;
 }
 
 
@@ -68,13 +144,6 @@ uint8_t INA226::getAddress()
 //
 //  Core functions
 //
-float INA226::getShuntVoltage()
-{
-  int16_t val = _readRegister(INA226_SHUNT_VOLTAGE);
-  return val * 2.5e-6;   //  fixed 2.50 uV
-}
-
-
 float INA226::getBusVoltage()
 {
   uint16_t val = _readRegister(INA226_BUS_VOLTAGE);
@@ -82,10 +151,10 @@ float INA226::getBusVoltage()
 }
 
 
-float INA226::getPower()
+float INA226::getShuntVoltage()
 {
-  uint16_t val = _readRegister(INA226_POWER);
-  return val * 25 * _current_LSB;  //  fixed 25 Watt
+  int16_t val = _readRegister(INA226_SHUNT_VOLTAGE);
+  return val * 2.5e-6;   //  fixed 2.50 uV
 }
 
 
@@ -96,79 +165,139 @@ float INA226::getCurrent()
 }
 
 
+float INA226::getPower()
+{
+  uint16_t val = _readRegister(INA226_POWER);
+  return val * 25 * _current_LSB;  //  fixed 25 Watt
+}
+
+
+bool INA226::isConversionReady()
+{
+  uint16_t mask = _readRegister(INA226_MASK_ENABLE);
+  return (mask & INA226_CONVERSION_READY_FLAG) == INA226_CONVERSION_READY_FLAG;
+}
+
+
+bool INA226::waitConversionReady()
+{
+  // Quick return if Ready (will be most of the times)
+  if (isConversionReady()) return true;
+
+  uint16_t dSamples = INA226_AVERAGE[_avg];
+  uint32_t dBvct_us = INA226_VBUS_MEASUREMENT[_mode] * dSamples * INA226_CT_US[_bvct];
+  uint32_t dSvct_us = INA226_VSH_MEASUREMENT[_mode] * dSamples * INA226_CT_US[_svct];
+  // There seems to be an almost fixed factor of 1.03 between theoretical and measured CT
+  // Let's take a factor of 1.05 just to have some slack and add 2 because of 2x rounding
+  uint32_t timeout_ms = ((105 * dBvct_us) / 100000) + ((105 * dSvct_us) / 100000) + 2;
+
+  uint32_t start = millis();
+  while ((millis() - start) <= timeout_ms) 
+  {
+    if (isConversionReady()) return true;
+    delay(1);
+  }
+
+  return false;
+}
+
+
+bool INA226::waitConversionReady(uint32_t timeout_ms)
+{
+  // Quick return if Ready (will be most of the times)
+  if (isConversionReady()) return true;
+
+  uint32_t start = millis();
+  while ((millis() - start) <= timeout_ms) 
+  {
+    if (isConversionReady()) return true;
+    delay(1);
+  }
+  return false;
+}
+
 ////////////////////////////////////////////////////////
 //
 //  Configuration
 //
-void INA226::reset()
+bool INA226::reset()
 {
   uint16_t mask = _readRegister(INA226_CONFIGURATION);
   mask |= INA226_CONF_RESET_MASK;
-  _writeRegister(INA226_CONFIGURATION, mask);
+  if (_writeRegister(INA226_CONFIGURATION, mask)) return false;
   //  reset calibration
   _current_LSB = 0;
   _maxCurrent  = 0;
   _shunt       = 0;
-}
-
-
-bool INA226::setAverage(uint8_t avg)
-{
-  if (avg > 7) return false;
-  uint16_t mask = _readRegister(INA226_CONFIGURATION);
-  mask &= ~INA226_CONF_AVERAGE_MASK;
-  mask |= (avg << 9);
-  _writeRegister(INA226_CONFIGURATION, mask);
+  //  Default mode, conversion time and average
+  _mode        = INA226_SHUNTBUSCONTINUOUS_MODE;
+  _avg         = INA226_NO_AVERAGE;
+  _bvct        = INA226_CT_SETTING_1100_US;
+  _svct        = INA226_CT_SETTING_1100_US;
   return true;
 }
 
 
-uint8_t INA226::getAverage()
+bool INA226::setAverage(ina226_avg_enum avg)
+{
+  uint16_t mask = _readRegister(INA226_CONFIGURATION);
+  mask &= ~INA226_CONF_AVERAGE_MASK;
+  mask |= (avg << 9);
+  if (_writeRegister(INA226_CONFIGURATION, mask)) return false;
+  _avg = avg;
+  return true;
+}
+
+
+ina226_avg_enum INA226::getAverage()
 {
   uint16_t mask = _readRegister(INA226_CONFIGURATION);
   mask &= INA226_CONF_AVERAGE_MASK;
   mask >>= 9;
-  return mask;
+  _avg = static_cast<ina226_avg_enum>(mask);
+  return _avg;
 }
 
 
-bool INA226::setBusVoltageConversionTime(uint8_t bvct)
+bool INA226::setBusVoltageConversionTime(ina226_ct_enum bvct)
 {
-  if (bvct > 7) return false;
   uint16_t mask = _readRegister(INA226_CONFIGURATION);
   mask &= ~INA226_CONF_BUSVC_MASK;
   mask |= (bvct << 6);
-  _writeRegister(INA226_CONFIGURATION, mask);
+  if (_writeRegister(INA226_CONFIGURATION, mask)) return false;
+  _bvct = bvct;
   return true;
 }
 
 
-uint8_t INA226::getBusVoltageConversionTime()
+ina226_ct_enum INA226::getBusVoltageConversionTime()
 {
   uint16_t mask = _readRegister(INA226_CONFIGURATION);
   mask &= INA226_CONF_BUSVC_MASK;
   mask >>= 6;
-  return mask;
+  _bvct = static_cast<ina226_ct_enum>(mask);
+  return _bvct;
 }
 
 
-bool INA226::setShuntVoltageConversionTime(uint8_t svct)
+bool INA226::setShuntVoltageConversionTime(ina226_ct_enum svct)
 {
-  if (svct > 7) return false;
   uint16_t mask = _readRegister(INA226_CONFIGURATION);
   mask &= ~INA226_CONF_SHUNTVC_MASK;
   mask |= (svct << 3);
-  _writeRegister(INA226_CONFIGURATION, mask);
+  if (_writeRegister(INA226_CONFIGURATION, mask)) return false;
+  _svct = svct;
   return true;
 }
 
 
-uint8_t INA226::getShuntVoltageConversionTime()
+ina226_ct_enum INA226::getShuntVoltageConversionTime()
 {
   uint16_t mask = _readRegister(INA226_CONFIGURATION);
   mask &= INA226_CONF_SHUNTVC_MASK;
   mask >>= 3;
-  return mask;
+  _svct = static_cast<ina226_ct_enum>(mask);
+  return _svct;
 }
 
 
@@ -273,7 +402,7 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
     _current_LSB *= 2;
     calib >>= 1;
   }
-  _writeRegister(INA226_CALIBRATION, calib);
+  if (_writeRegister(INA226_CALIBRATION, calib)) return INA226_ERR_WRITE_REG_FAILED;
 
   _maxCurrent = _current_LSB * 32768;
   _shunt = shunt;
@@ -303,22 +432,23 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
 //
 //  operating mode
 //
-bool INA226::setMode(uint8_t mode)
+bool INA226::setMode(ina226_mode_enum mode)
 {
-  if (mode > 7) return false;
   uint16_t config = _readRegister(INA226_CONFIGURATION);
   config &= ~INA226_CONF_MODE_MASK;
   config |= mode;
-  _writeRegister(INA226_CONFIGURATION, config);
+  if (_writeRegister(INA226_CONFIGURATION, config)) return false;
+  _mode = mode;
   return true;
 }
 
 
-uint8_t INA226::getMode()
+ina226_mode_enum INA226::getMode()
 {
   uint16_t mode = _readRegister(INA226_CONFIGURATION);
   mode &= INA226_CONF_MODE_MASK;
-  return mode;
+  _mode = static_cast<ina226_mode_enum>(mode);
+  return _mode;
 }
 
 
@@ -326,9 +456,10 @@ uint8_t INA226::getMode()
 //
 //  alert
 //
-void INA226::setAlertRegister(uint16_t mask)
+bool INA226::setAlertRegister(uint16_t mask)
 {
-  _writeRegister(INA226_MASK_ENABLE, (mask & 0xFC00));
+  if (_writeRegister(INA226_MASK_ENABLE, (mask & 0xFC00))) return false;
+  return true;
 }
 
 
@@ -338,9 +469,10 @@ uint16_t INA226::getAlertFlag()
 }
 
 
-void INA226::setAlertLimit(uint16_t limit)
+bool INA226::setAlertLimit(uint16_t limit)
 {
-  _writeRegister(INA226_ALERT_LIMIT, limit);
+  if (_writeRegister(INA226_ALERT_LIMIT, limit)) return false;
+  return true;
 }
 
 
