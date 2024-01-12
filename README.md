@@ -282,11 +282,13 @@ Descriptive mode functions (convenience wrappers).
 
 See datasheet, not tested yet.
 
-- **void setAlertRegister(uint16_t mask)** by setting the mask 
+- **bool setAlertRegister(uint16_t mask)** by setting the mask 
 one of five types of over- or underflow can be detected. 
 Another feature that can be set is the conversion ready flag.
+Returns true if write to register successful.
 - **uint16_t getAlertFlag()** returns the mask set by **setAlertRegister()**.
-- **void setAlertLimit(uint16_t limit)** sets the limit that belongs to the chosen Alert Flag
+- **bool setAlertLimit(uint16_t limit)** sets the limit that belongs to the chosen Alert Flag.
+Returns true if write to register successful.
 - **uint16_t getAlertLimit()** returns the limit set by **setAlertLimit()**.
 
 

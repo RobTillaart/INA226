@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.5.2] - 2024-01-06
+- many thanks to Henk Holdijk for his improvements.
 - fix #35, add **bool isConversionReady()**
-  - thanks to Henk Holdijk
 - add **bool waitConversionReady(uint32_t timeout = INA226_MAX_WAIT_MS)**
-- INA226_MAX_WAIT_MS
-  - thanks to Henk Holdijk
+- add constant **INA226_MAX_WAIT_MS**
+- changed return type **bool setAlertRegister(uint16_t mask)**
+- changed return type **bool setAlertLimit(uint16_t limit)**
 - reorder functions in .cpp file to match .h
 - remove unneeded include examples.
 - update readme.md

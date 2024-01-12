@@ -125,9 +125,9 @@ public:
   //  - which units to define a limit per mask ?
   //    same as voltage registers ?
   //  - how to test
-  void     setAlertRegister(uint16_t mask);
+  bool     setAlertRegister(uint16_t mask);
   uint16_t getAlertFlag();
-  void     setAlertLimit(uint16_t limit);
+  bool     setAlertLimit(uint16_t limit);
   uint16_t getAlertLimit();
 
 

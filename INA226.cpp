@@ -346,9 +346,10 @@ uint8_t INA226::getMode()
 //
 //  alert
 //
-void INA226::setAlertRegister(uint16_t mask)
+bool INA226::setAlertRegister(uint16_t mask)
 {
-  _writeRegister(INA226_MASK_ENABLE, (mask & 0xFC00));
+  if (_writeRegister(INA226_MASK_ENABLE, (mask & 0xFC00)) != 0) return false;
+  return true;
 }
 
 
@@ -358,9 +359,10 @@ uint16_t INA226::getAlertFlag()
 }
 
 
-void INA226::setAlertLimit(uint16_t limit)
+bool INA226::setAlertLimit(uint16_t limit)
 {
-  _writeRegister(INA226_ALERT_LIMIT, limit);
+  if (_writeRegister(INA226_ALERT_LIMIT, limit) != 0) return false;
+  return true;
 }
 
 
