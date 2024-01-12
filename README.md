@@ -138,6 +138,9 @@ Also the value is not meaningful if there is no shunt connected.
 - **float getCurrent()** is the current through the shunt in Ampere.
 - **float getPower()** is the current x BusVoltage in Watt.
 - **bool isConversionReady()** returns true if conversion ready flag is set.
+- **bool waitConversionReady(uint32_t timeout = INA226_MAX_WAIT_MS)** 
+active waiting for ready flag.
+Polling for max timeout time, default 600 milliseconds, for wake up time.
 
 The library has helper functions to convert above output to a more appropriate scale of units.
 
