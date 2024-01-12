@@ -7,7 +7,6 @@
 //     URL: https://github.com/RobTillaart/INA226
 //
 //  Read the datasheet for the details
-//
 
 
 #include "Arduino.h"
@@ -18,31 +17,33 @@
 
 
 //  set by setAlertRegister
-#define INA226_SHUNT_OVER_VOLTAGE        0x8000
-#define INA226_SHUNT_UNDER_VOLTAGE       0x4000
-#define INA226_BUS_OVER_VOLTAGE          0x2000
-#define INA226_BUS_UNDER_VOLTAGE         0x1000
-#define INA226_POWER_OVER_LIMIT          0x0800
-#define INA226_CONVERSION_READY          0x0400
+#define INA226_SHUNT_OVER_VOLTAGE         0x8000
+#define INA226_SHUNT_UNDER_VOLTAGE        0x4000
+#define INA226_BUS_OVER_VOLTAGE           0x2000
+#define INA226_BUS_UNDER_VOLTAGE          0x1000
+#define INA226_POWER_OVER_LIMIT           0x0800
+#define INA226_CONVERSION_READY           0x0400
+
 
 //  returned by getAlertFlag
-#define INA226_ALERT_FUNCTION_FLAG       0x0010
-#define INA226_CONVERSION_READY_FLAG     0x0008
-#define INA226_MATH_OVERFLOW_FLAG        0x0004
-#define INA226_ALERT_POLARITY_FLAG       0x0002
-#define INA226_ALERT_LATCH_ENABLE_FLAG   0x0001
+#define INA226_ALERT_FUNCTION_FLAG        0x0010
+#define INA226_CONVERSION_READY_FLAG      0x0008
+#define INA226_MATH_OVERFLOW_FLAG         0x0004
+#define INA226_ALERT_POLARITY_FLAG        0x0002
+#define INA226_ALERT_LATCH_ENABLE_FLAG    0x0001
+
 
 //  returned by setMaxCurrentShunt
-#define INA226_ERR_NONE                  0x0000
-#define INA226_ERR_SHUNTVOLTAGE_HIGH     0x8000
-#define INA226_ERR_MAXCURRENT_LOW        0x8001
-#define INA226_ERR_SHUNT_LOW             0x8002
-#define INA226_ERR_NORMALIZE_FAILED      0x8003
+#define INA226_ERR_NONE                   0x0000
+#define INA226_ERR_SHUNTVOLTAGE_HIGH      0x8000
+#define INA226_ERR_MAXCURRENT_LOW         0x8001
+#define INA226_ERR_SHUNT_LOW              0x8002
+#define INA226_ERR_NORMALIZE_FAILED       0x8003
 
 //  See issue #26
-#define INA226_MINIMAL_SHUNT             0.001
+#define INA226_MINIMAL_SHUNT              0.001
 
-#define INA226_MAX_WAIT_MS               600   //  millis
+#define INA226_MAX_WAIT_MS                600   //  millis
 
 
 class INA226

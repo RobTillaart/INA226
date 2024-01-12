@@ -4,29 +4,31 @@
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
+//
+//  Read the datasheet for the details
 
 
 #include "INA226.h"
 
 //  REGISTERS
-#define INA226_CONFIGURATION        0x00
-#define INA226_SHUNT_VOLTAGE        0x01
-#define INA226_BUS_VOLTAGE          0x02
-#define INA226_POWER                0x03
-#define INA226_CURRENT              0x04
-#define INA226_CALIBRATION          0x05
-#define INA226_MASK_ENABLE          0x06
-#define INA226_ALERT_LIMIT          0x07
-#define INA226_MANUFACTURER         0xFE
-#define INA226_DIE_ID               0xFF
+#define INA226_CONFIGURATION              0x00
+#define INA226_SHUNT_VOLTAGE              0x01
+#define INA226_BUS_VOLTAGE                0x02
+#define INA226_POWER                      0x03
+#define INA226_CURRENT                    0x04
+#define INA226_CALIBRATION                0x05
+#define INA226_MASK_ENABLE                0x06
+#define INA226_ALERT_LIMIT                0x07
+#define INA226_MANUFACTURER               0xFE
+#define INA226_DIE_ID                     0xFF
 
 
 //  CONFIGURATION MASKS
-#define INA226_CONF_RESET_MASK      0x8000
-#define INA226_CONF_AVERAGE_MASK    0x0E00
-#define INA226_CONF_BUSVC_MASK      0x01C0
-#define INA226_CONF_SHUNTVC_MASK    0x0038
-#define INA226_CONF_MODE_MASK       0x0007
+#define INA226_CONF_RESET_MASK            0x8000
+#define INA226_CONF_AVERAGE_MASK          0x0E00
+#define INA226_CONF_BUSVC_MASK            0x01C0
+#define INA226_CONF_SHUNTVC_MASK          0x0038
+#define INA226_CONF_MODE_MASK             0x0007
 
 
 ////////////////////////////////////////////////////////
@@ -68,13 +70,6 @@ uint8_t INA226::getAddress()
 //
 //  Core functions
 //
-float INA226::getShuntVoltage()
-{
-  int16_t val = _readRegister(INA226_SHUNT_VOLTAGE);
-  return val * 2.5e-6;   //  fixed 2.50 uV
-}
-
-
 float INA226::getBusVoltage()
 {
   uint16_t val = _readRegister(INA226_BUS_VOLTAGE);
@@ -82,10 +77,10 @@ float INA226::getBusVoltage()
 }
 
 
-float INA226::getPower()
+float INA226::getShuntVoltage()
 {
-  uint16_t val = _readRegister(INA226_POWER);
-  return val * 25 * _current_LSB;  //  fixed 25 Watt
+  int16_t val = _readRegister(INA226_SHUNT_VOLTAGE);
+  return val * 2.5e-6;   //  fixed 2.50 uV
 }
 
 
@@ -93,6 +88,13 @@ float INA226::getCurrent()
 {
   int16_t val = _readRegister(INA226_CURRENT);
   return val * _current_LSB;
+}
+
+
+float INA226::getPower()
+{
+  uint16_t val = _readRegister(INA226_POWER);
+  return val * 25 * _current_LSB;  //  fixed 25 Watt
 }
 
 

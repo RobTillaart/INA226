@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add **bool waitConversionReady(uint32_t timeout = INA226_MAX_WAIT_MS)**
 - INA226_MAX_WAIT_MS
   - thanks to Henk Holdijk
+- reorder functions in .cpp file to match .h
+- remove unneeded include examples.
+- update readme.md
 
 
 ## [0.5.1] - 2023-12-10
