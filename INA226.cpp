@@ -131,6 +131,7 @@ bool INA226::reset()
   _current_LSB = 0;
   _maxCurrent  = 0;
   _shunt       = 0;
+  return true;
 }
 
 
