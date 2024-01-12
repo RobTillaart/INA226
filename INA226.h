@@ -68,19 +68,19 @@ public:
 
 
   //  Scale helpers milli range
-  float    getBusVoltage_mV()   { return getBusVoltage() * 1e3; };
+  float    getBusVoltage_mV()   { return getBusVoltage()   * 1e3; };
   float    getShuntVoltage_mV() { return getShuntVoltage() * 1e3; };
-  float    getCurrent_mA()      { return getCurrent() * 1e3; };
-  float    getPower_mW()        { return getPower() * 1e3; };
+  float    getCurrent_mA()      { return getCurrent()      * 1e3; };
+  float    getPower_mW()        { return getPower()        * 1e3; };
   //  Scale helpers micro range
-  float    getBusVoltage_uV()   { return getBusVoltage() * 1e6; };
+  float    getBusVoltage_uV()   { return getBusVoltage()   * 1e6; };
   float    getShuntVoltage_uV() { return getShuntVoltage() * 1e6; };
-  float    getCurrent_uA()      { return getCurrent() * 1e6; };
-  float    getPower_uW()        { return getPower() * 1e6; };
+  float    getCurrent_uA()      { return getCurrent()      * 1e6; };
+  float    getPower_uW()        { return getPower()        * 1e6; };
 
 
   //  Configuration
-  void     reset();
+  bool     reset();
   bool     setAverage(uint8_t avg = 0);
   uint8_t  getAverage();
   bool     setBusVoltageConversionTime(uint8_t bvct = 4);
@@ -94,17 +94,15 @@ public:
   //  shunt * maxCurrent < 81 mV
   //  maxCurrent >= 0.001
   //  shunt      >= 0.001
-  int      setMaxCurrentShunt(float maxCurrent = 20.0,
-                              float shunt = 0.002,
-                              bool normalize = true);
+  int      setMaxCurrentShunt(float maxCurrent = 20.0, float shunt = 0.002, bool normalize = true);
   bool     isCalibrated()     { return _current_LSB != 0.0; };
 
   //  These functions return zero if not calibrated!
-  float    getCurrentLSB()    { return _current_LSB; };
+  float    getCurrentLSB()    { return _current_LSB;       };
   float    getCurrentLSB_mA() { return _current_LSB * 1e3; };
   float    getCurrentLSB_uA() { return _current_LSB * 1e6; };
-  float    getShunt()         { return _shunt; };
-  float    getMaxCurrent()    { return _maxCurrent; };
+  float    getShunt()         { return _shunt;             };
+  float    getMaxCurrent()    { return _maxCurrent;        };
 
 
   //  Operating mode

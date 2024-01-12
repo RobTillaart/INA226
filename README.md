@@ -165,8 +165,9 @@ Note: the conversion time runs in the background and if done value is stored in 
 The core functions read from the registers, so they are not blocked.
 They return the same value if no new data is available / ready.
 
-- **void reset()** software power on reset. 
+- **bool reset()** software power on reset. 
 This implies calibration with **setMaxCurrentShunt()** needs to be redone.
+Returns true upon success.
 - **bool setAverage(uint8_t avg = 0)** see table below.
 (0 = default ==> 1 read), returns false if parameter > 7.
 - **uint8_t getAverage()** returns the value set. See table below.

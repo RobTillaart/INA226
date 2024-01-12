@@ -120,11 +120,13 @@ bool INA226::waitConversionReady(uint32_t timeout)
 //
 //  Configuration
 //
-void INA226::reset()
+bool INA226::reset()
 {
   uint16_t mask = _readRegister(INA226_CONFIGURATION);
   mask |= INA226_CONF_RESET_MASK;
-  _writeRegister(INA226_CONFIGURATION, mask);
+  uint16_t result = _writeRegister(INA226_CONFIGURATION, mask);
+  //  Serial.println(result);
+  if (result != 0) return false;
   //  reset calibration
   _current_LSB = 0;
   _maxCurrent  = 0;
@@ -348,7 +350,9 @@ uint8_t INA226::getMode()
 //
 bool INA226::setAlertRegister(uint16_t mask)
 {
-  if (_writeRegister(INA226_MASK_ENABLE, (mask & 0xFC00)) != 0) return false;
+  uint16_t result = _writeRegister(INA226_MASK_ENABLE, (mask & 0xFC00));
+  //  Serial.println(result);
+  if (result != 0) return false;
   return true;
 }
 
@@ -361,7 +365,9 @@ uint16_t INA226::getAlertFlag()
 
 bool INA226::setAlertLimit(uint16_t limit)
 {
-  if (_writeRegister(INA226_ALERT_LIMIT, limit) != 0) return false;
+  uint16_t result = _writeRegister(INA226_ALERT_LIMIT, limit);
+  //  Serial.println(result);
+  if (result != 0) return false;
   return true;
 }
 
