@@ -47,15 +47,15 @@
 
 
 enum ina226_set_average_enum {
-    INA226_1_SAMPLE = 0,
-    INA226_4_SAMPLES = 1,
-    INA226_16_SAMPLES = 2,
-    INA226_64_SAMPLES = 3,
-    INA226_128_SAMPLES = 4,
-    INA226_256_SAMPLES = 5,
-    INA226_512_SAMPLES = 6,
+    INA226_1_SAMPLE     = 0,
+    INA226_4_SAMPLES    = 1,
+    INA226_16_SAMPLES   = 2,
+    INA226_64_SAMPLES   = 3,
+    INA226_128_SAMPLES  = 4,
+    INA226_256_SAMPLES  = 5,
+    INA226_512_SAMPLES  = 6,
     INA226_1024_SAMPLES = 7
-  };
+};
 
 
 enum ina226_timing_enum {
@@ -67,7 +67,7 @@ enum ina226_timing_enum {
     INA226_2100_us = 5,
     INA226_4200_us = 6,
     INA226_8300_us = 7
-  };
+};
 
 
 class INA226
@@ -105,11 +105,11 @@ public:
 
   //  Configuration
   bool     reset();
-  bool     setAverage(uint8_t avg = 0);
+  bool     setAverage(uint8_t avg = INA226_1_SAMPLE);
   uint8_t  getAverage();
-  bool     setBusVoltageConversionTime(uint8_t bvct = 4);
+  bool     setBusVoltageConversionTime(uint8_t bvct = INA226_1100_us);
   uint8_t  getBusVoltageConversionTime();
-  bool     setShuntVoltageConversionTime(uint8_t svct = 4);
+  bool     setShuntVoltageConversionTime(uint8_t svct = INA226_1100_us);
   uint8_t  getShuntVoltageConversionTime();
 
 

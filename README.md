@@ -183,15 +183,15 @@ in your own code.
 - **bool reset()** software power on reset. 
 This implies calibration with **setMaxCurrentShunt()** needs to be redone.
 Returns true upon success.
-- **bool setAverage(uint8_t avg = 0)** see table below.
+- **bool setAverage(uint8_t avg = INA226_1_SAMPLE)** see table below.
 (0 = default ==> 1 read), returns false if parameter > 7.
 - **uint8_t getAverage()** returns the value set. See table below.
 Note this is not the count of samples.
-- **bool setBusVoltageConversionTime(uint8_t bvct = 4)** see table below.
+- **bool setBusVoltageConversionTime(uint8_t bvct = INA226_1100_us)** see table below.
 (4 = default ==> 1.1 ms), returns false if parameter > 7.
 - **uint8_t getBusVoltageConversionTime()** return the value set. 
 Note the value returned is not a unit of time.
-- **bool setShuntVoltageConversionTime(uint8_t svct = 4)** see table below.
+- **bool setShuntVoltageConversionTime(uint8_t svct = INA226_1100_us)** see table below.
 (4 = default ==> 1.1 ms), returns false if parameter > 7.
 - **uint8_t getShuntVoltageConversionTime()** return the value set. 
 Note the value returned is not a unit of time.
