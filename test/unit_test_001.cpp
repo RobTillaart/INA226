@@ -84,6 +84,19 @@ unittest(test_constants)
 }
 
 
+uinttest(test_enum)
+{
+  assertEqual(0, INA226_1_SAMPLE);
+  assertEqual(1, INA226_4_SAMPLES);
+  assertEqual(2, INA226_16_SAMPLES);
+  assertEqual(3, INA226_64_SAMPLES);
+  assertEqual(4, INA226_128_SAMPLES);
+  assertEqual(5, INA226_256_SAMPLES);
+  assertEqual(6, INA226_512_SAMPLES);
+  assertEqual(7, INA226_1024_SAMPLES);
+}
+
+
 unittest(test_core_functions)
 {
   INA226 INA(0x40);

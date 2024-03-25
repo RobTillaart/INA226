@@ -1,7 +1,7 @@
 #pragma once
 //    FILE: INA226.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.5.2
+// VERSION: 0.5.3
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -13,7 +13,7 @@
 #include "Wire.h"
 
 
-#define INA226_LIB_VERSION              "0.5.2"
+#define INA226_LIB_VERSION              "0.5.3"
 
 
 //  set by setAlertRegister
@@ -44,6 +44,18 @@
 #define INA226_MINIMAL_SHUNT              0.001
 
 #define INA226_MAX_WAIT_MS                600   //  millis
+
+
+enum ina226_set_average_enum {
+    INA226_1_SAMPLE = 0,
+    INA226_4_SAMPLES = 1,
+    INA226_16_SAMPLES = 2,
+    INA226_64_SAMPLES = 3,
+    INA226_128_SAMPLES = 4,
+    INA226_256_SAMPLES = 5,
+    INA226_512_SAMPLES = 6,
+    INA226_1024_SAMPLES = 7
+  };
 
 
 class INA226
