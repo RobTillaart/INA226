@@ -58,6 +58,18 @@ enum ina226_set_average_enum {
   };
 
 
+enum ina226_timing_enum {
+    INA226_140_us  = 0,
+    INA226_204_us  = 1,
+    INA226_332_us  = 2,
+    INA226_588_us  = 3,
+    INA226_1100_us = 4,
+    INA226_2100_us = 5,
+    INA226_4200_us = 6,
+    INA226_8300_us = 7
+  };
+
+
 class INA226
 {
 public:
