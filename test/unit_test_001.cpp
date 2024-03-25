@@ -84,7 +84,7 @@ unittest(test_constants)
 }
 
 
-uinttest(test_enum_setAverage)
+unittest(test_enum_setAverage)
 {
   assertEqual(0, INA226_1_SAMPLE);
   assertEqual(1, INA226_4_SAMPLES);
@@ -97,7 +97,7 @@ uinttest(test_enum_setAverage)
 }
 
 
-uinttest(test_enum_BVCT_SVCT)
+unittest(test_enum_BVCT_SVCT)
 {
   assertEqual(0, INA226_140_us );
   assertEqual(1, INA226_204_us );
