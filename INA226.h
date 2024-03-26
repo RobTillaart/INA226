@@ -46,7 +46,8 @@
 #define INA226_MAX_WAIT_MS                600   //  millis
 
 
-enum ina226_set_average_enum {
+//  for setAverage() and getAverage()
+enum ina226_average_enum {
     INA226_1_SAMPLE     = 0,
     INA226_4_SAMPLES    = 1,
     INA226_16_SAMPLES   = 2,
@@ -58,6 +59,7 @@ enum ina226_set_average_enum {
 };
 
 
+//  for BVCT and SVCT conversion timing.
 enum ina226_timing_enum {
     INA226_140_us  = 0,
     INA226_204_us  = 1,
