@@ -6,11 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [0.5.4] - 2024-
+## [0.5.4] - 2024-04-04
 - add multi device and array example
 - add address table to readme.md
-- 
-
+- minor edits
 
 ## [0.5.3] - 2024-03-25
 - add enum **ina226_average_enum** (Thanks to Henk Holdijk)
@@ -20,7 +19,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - update section **Configuration** in readme.md.
 - update unit test
 - minor edits
-
 
 ## [0.5.2] - 2024-01-06
 - Thanks to Henk Holdijk for his improvements.
