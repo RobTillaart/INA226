@@ -94,7 +94,7 @@ float INA226::getCurrent()
 float INA226::getPower()
 {
   uint16_t val = _readRegister(INA226_POWER);
-  return val * 25 * _current_LSB;  //  fixed 25 Watt
+  return val * _current_LSB * 25;  //  fixed 25 Watt
 }
 
 
