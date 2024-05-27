@@ -232,18 +232,20 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
        (due to unusual low resistor values in relation to maxCurrent) determines currentLSB
        we have to take the upper value for currentLSB
 
+       (adjusted in 0.6.0)
        calculation of currentLSB based on shunt resistor and calibration register limits (2 bytes)
        cal = 0.00512 / ( shunt * currentLSB )
-       cal(max) = 2^16-1
+       cal(max) = 2^15-1
        currentLSB(min) = 0.00512 / ( shunt * cal(max) )
-       currentLSB(min) ~= 0.00512 / ( shunt * 2^16 )
-       currentLSB(min) ~= 2^9 * 1e-5 / ( shunt * 2^16 )
-       currentLSB(min) ~= 1e-5 / 2^7 / shunt
-       currentLSB(min) ~= 7.8125e-8 / shunt
+       currentLSB(min) ~= 0.00512 / ( shunt * 2^15 )
+       currentLSB(min) ~= 2^9 * 1e-5 / ( shunt * 2^15 )
+       currentLSB(min) ~= 1e-5 / 2^6 / shunt
+       currentLSB(min) ~= 1.5625e-7 / shunt
     */
-    if ( 7.8125e-8 / shunt > _current_LSB ) {
-      //  shunt resistor determines currentLSB -> take this a starting point for currentLSB
-      _current_LSB = 7.8125e-8 / shunt;
+    if ( 1.5625e-7 / shunt > _current_LSB ) {
+      //  shunt resistor determines current_LSB 
+      //  => take this a starting point for current_LSB
+      _current_LSB = 1.5625e-7 / shunt;
     }
 
     #ifdef printdebug
