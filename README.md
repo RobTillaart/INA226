@@ -230,7 +230,7 @@ Note the value returned is not a unit of time.
 
 
 |  enum description  | BVCT SVCT |   time    |  notes  |
-|:------------------:|:---------:|----------:|--------:|
+|:------------------:|:---------:|:---------:|--------:|
 |  INA226_140_us     |     0     |  140 us   |
 |  INA226_204_us     |     1     |  204 us   |
 |  INA226_332_us     |     2     |  332 us   |
@@ -285,7 +285,7 @@ See https://github.com/RobTillaart/INA226/pull/29 for details of the discussion.
 #### Error codes setMaxCurrentShunt
 
 |  descriptive name error        |  value   |  meaning  |
-|:-------------------------------|---------:|:----------|
+|:-------------------------------|:--------:|:----------|
 |  INA226_ERR_NONE               |  0x0000  |  OK
 |  INA226_ERR_SHUNTVOLTAGE_HIGH  |  0x8000  |  maxCurrent \* shunt > 80 mV 
 |  INA226_ERR_MAXCURRENT_LOW     |  0x8001  |  maxCurrent < 0.001
@@ -329,7 +329,7 @@ Returns true if write to register successful.
 
 
 |  description alert register  |  value   | a.k.a.  |
-|:-----------------------------|---------:| -------:|
+|:-----------------------------|:--------:| -------:|
 |  INA226_SHUNT_OVER_VOLTAGE   |  0x8000  |  SOL    |
 |  INA226_SHUNT_UNDER_VOLTAGE  |  0x4000  |  SUL    |
 |  INA226_BUS_OVER_VOLTAGE     |  0x2000  |  BOL    |
@@ -339,7 +339,7 @@ Returns true if write to register successful.
 
 
 |  description alert flags         |  value   |
-|:---------------------------------|---------:|
+|:---------------------------------|:--------:|
 |  INA226_ALERT_FUNCTION_FLAG      |  0x0010  |
 |  INA226_CONVERSION_READY_FLAG    |  0x0008  |
 |  INA226_MATH_OVERFLOW_FLAG       |  0x0004  |
@@ -379,11 +379,6 @@ Be aware that
 - the resistance of wires used affect measurements with very small shunts.
 - solder might change the resistance too.
 - you do this at your own risk.
-
-
-## Operational
-
-See examples.. 
 
 
 ## Future

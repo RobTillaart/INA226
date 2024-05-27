@@ -1,6 +1,6 @@
 //    FILE: INA226.cpp
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.5.5
+// VERSION: 0.6.0
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -291,7 +291,7 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
 
   //  auto scale calibration if needed.
   uint32_t calib = round(0.00512 / (_current_LSB * shunt));
-  while (calib > 65535)
+  while (calib > 32767)
   {
     _current_LSB *= 2;
     calib >>= 1;
