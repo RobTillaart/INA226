@@ -111,7 +111,7 @@ bool INA226::waitConversionReady(uint32_t timeout)
   while ( (millis() - start) <= timeout)
   {
     if (isConversionReady()) return true;
-   delay(1);  //  implicit yield();
+    delay(1);  //  implicit yield();
   }
   return false;
 }
@@ -214,14 +214,14 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
 
   _current_LSB = maxCurrent * 3.0517578125e-5;      //  maxCurrent / 32768;
 
-  #ifdef printdebug
-    Serial.println();
-    Serial.print("normalize:\t");
-    Serial.println(normalize ? " true":" false");
-    Serial.print("initial current_LSB:\t");
-    Serial.print(_current_LSB * 1e+6, 1);
-    Serial.println(" uA / bit");
-  #endif
+#ifdef printdebug
+  Serial.println();
+  Serial.print("normalize:\t");
+  Serial.println(normalize ? " true" : " false");
+  Serial.print("initial current_LSB:\t");
+  Serial.print(_current_LSB * 1e+6, 1);
+  Serial.println(" uA / bit");
+#endif
 
   //  normalize the LSB to a round number
   //  LSB will increase
@@ -243,16 +243,16 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
        currentLSB(min) ~= 1.5625e-7 / shunt
     */
     if ( 1.5625e-7 / shunt > _current_LSB ) {
-      //  shunt resistor determines current_LSB 
+      //  shunt resistor determines current_LSB
       //  => take this a starting point for current_LSB
       _current_LSB = 1.5625e-7 / shunt;
     }
 
-    #ifdef printdebug
-      Serial.print("Pre-scale current_LSB:\t");
-      Serial.print(_current_LSB * 1e+6, 1);
-      Serial.println(" uA / bit");
-    #endif
+#ifdef printdebug
+    Serial.print("Pre-scale current_LSB:\t");
+    Serial.print(_current_LSB * 1e+6, 1);
+    Serial.println(" uA / bit");
+#endif
 
     //  normalize _current_LSB to a value of 1, 2 or 5 * 1e-6 to 1e-3
     //  convert float to int
@@ -276,18 +276,19 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
         factor *= 10;
         i++;
       }
-    } while( (i < 4) && (!result) );  //  factor < 10000
+    } while ( (i < 4) && (!result) );  //  factor < 10000
 
-    if (result == false) {  //  not succeeded to normalize.
+    if (result == false)  //  not succeeded to normalize.
+    {
       _current_LSB = 0;
       return INA226_ERR_NORMALIZE_FAILED;
     }
 
-    #ifdef printdebug
-      Serial.print("After scale current_LSB:\t");
-      Serial.print(_current_LSB * 1e+6, 1);
-      Serial.println(" uA / bit");
-    #endif
+#ifdef printdebug
+    Serial.print("After scale current_LSB:\t");
+    Serial.print(_current_LSB * 1e+6, 1);
+    Serial.println(" uA / bit");
+#endif
     // done
   }
 
@@ -303,22 +304,22 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
   _maxCurrent = _current_LSB * 32768;
   _shunt = shunt;
 
-  #ifdef printdebug
-    Serial.print("Final current_LSB:\t");
-    Serial.print(_current_LSB * 1e+6, 1);
-    Serial.println(" uA / bit");
-    Serial.print("Calibration:\t");
-    Serial.println(calib);
-    Serial.print("Max current:\t");
-    Serial.print(_maxCurrent, 3);
-    Serial.println(" A");
-    Serial.print("Shunt:\t");
-    Serial.print(_shunt, 4);
-    Serial.println(" Ohm");
-    Serial.print("ShuntV:\t");
-    Serial.print(shuntVoltage, 4);
-    Serial.println(" Volt");
-  #endif
+#ifdef printdebug
+  Serial.print("Final current_LSB:\t");
+  Serial.print(_current_LSB * 1e+6, 1);
+  Serial.println(" uA / bit");
+  Serial.print("Calibration:\t");
+  Serial.println(calib);
+  Serial.print("Max current:\t");
+  Serial.print(_maxCurrent, 3);
+  Serial.println(" A");
+  Serial.print("Shunt:\t");
+  Serial.print(_shunt, 4);
+  Serial.println(" Ohm");
+  Serial.print("ShuntV:\t");
+  Serial.print(shuntVoltage, 4);
+  Serial.println(" Volt");
+#endif
 
   return INA226_ERR_NONE;
 }
