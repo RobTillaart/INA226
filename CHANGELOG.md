@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.6.1] - 2025-01-27
 - fix #49, precision math setMaxCurrentShunt() in INA226.cpp
+- changed max shunt voltage to 81.9 mV (0.02 under datasheet limit)
 - changed INA226_MINIMAL_SHUNT_OHM
 - update comments in INA226.h
 - add INA_comparison_table.md

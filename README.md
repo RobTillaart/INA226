@@ -26,11 +26,11 @@ Read datasheet for details.
 The INA226 is a voltage, current and power measurement device. 
 A few important maxima, see datasheet, chapter 6.
 
-|  description    |  max  |   unit   |  notes  |
-|:----------------|------:|---------:|:--------|
-|  bus voltage    |  36   |    Volt  |  unclear for how long.
-|  shunt voltage  |  80   |   mVolt  |
-|  current        |  20   |  Ampere  | 
+|  description    |   max  |   unit   |  notes  |
+|:----------------|-------:|---------:|:--------|
+|  bus voltage    |  36    |    Volt  |  unclear for how long.
+|  shunt voltage  |  81.9  |   mVolt  |  datasheet 81.92 mV
+|  current        |  20    |  Ampere  |
 
 
 ### 0.5.0 Breaking change
@@ -264,7 +264,7 @@ Calibration is mandatory to get **getCurrent()** and **getPower()** to work.
 - **int setMaxCurrentShunt(float ampere = 20.0, float ohm = 0.002, bool normalize = true)** 
 set the calibration register based upon the shunt and the max Ampere. 
 From these two values the current_LSB is derived, the steps of the ADC when measuring current.
-Returns Error code, see below.
+Returns Error code, see below. See #49 about math rounding errors.
 - **bool isCalibrated()** returns true if CurrentLSB has been calculated by **setMaxCurrentShunt()**.
 Value should not be zero.
 - **float getCurrentLSB()** returns the LSB in Ampere == precision of the calibration.
@@ -295,7 +295,7 @@ See https://github.com/RobTillaart/INA226/pull/29 for details of the discussion.
 |  descriptive name error        |  value   |  meaning  |
 |:-------------------------------|:--------:|:----------|
 |  INA226_ERR_NONE               |  0x0000  |  OK
-|  INA226_ERR_SHUNTVOLTAGE_HIGH  |  0x8000  |  maxCurrent \* shunt > 80 mV 
+|  INA226_ERR_SHUNTVOLTAGE_HIGH  |  0x8000  |  maxCurrent \* shunt > 81.9 mV
 |  INA226_ERR_MAXCURRENT_LOW     |  0x8001  |  maxCurrent < 0.001
 |  INA226_ERR_SHUNT_LOW          |  0x8002  |  shunt      < 0.001
 |  INA226_ERR_NORMALIZE_FAILED   |  0x8003  |  not possible to normalize.
