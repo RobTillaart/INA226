@@ -80,7 +80,7 @@ unittest(test_constants)
   assertEqual(0x8001, INA226_ERR_MAXCURRENT_LOW);
   assertEqual(0x8002, INA226_ERR_SHUNT_LOW);
 
-  assertEqualFloat(0.001, INA226_MINIMAL_SHUNT, 0.0001);
+  assertEqualFloat(0.001, INA226_MINIMAL_SHUNT_OHM, 0.0001);
 }
 
 
