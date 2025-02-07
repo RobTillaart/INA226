@@ -107,8 +107,13 @@ All data bytes are transmitted most significant byte first._
 
 ## About Measurements
 
-Calibration with **setMaxCurrentShunt()** is mandatory to get 
-**getCurrent()** and **getPower()** to work.
+Calibration with  **setup()**  or **setMaxCurrentShunt()** is mandatory to get **getCurrent()** and 
+**getPower()** to work. Using **setup()** user has flexibility of setting desired current least 
+significant bit value. An easy way to calibrate for shunt resistance is provided in INA226_calibrate 
+example. Use either **setup()** or **setMaxCurrentShunt()**.
+
+An easy procedure to accurately calibrate shunt resistance, current zero offset and bus 
+voltage scaling has been provided under examples in **INA226_calibration example**. 
 
 Some initial tests shows that the readings do not 100% add up. 
 I expect this is caused by fluctuations in my power supply used and
@@ -261,6 +266,10 @@ See datasheet.
 
 Calibration is mandatory to get **getCurrent()** and **getPower()** to work.
 
+- **int setup(float shunt = 0.1, float current_LSB_mA = 0.1, float current_zero_offset_mA = 0,** 
+**uint16_t bus_V_scaling_e4 = 10000)** set the calibration register based user provided current_LSB. 
+Returns Error code, see below. Only one out of **int setMaxCurrentShunt()** or **int setup()** is to 
+be used. 
 - **int setMaxCurrentShunt(float ampere = 20.0, float ohm = 0.002, bool normalize = true)** 
 set the calibration register based upon the shunt and the max Ampere. 
 From these two values the current_LSB is derived, the steps of the ADC when measuring current.

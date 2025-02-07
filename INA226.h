@@ -45,6 +45,7 @@
 
 #define INA226_MAX_WAIT_MS                600   //  millis
 
+#define INA226_MAX_SHUNT_VOLTAGE          (81.92 / 1000)
 
 //  for setAverage() and getAverage()
 enum ina226_average_enum {
@@ -77,6 +78,9 @@ class INA226
 public:
   //  address between 0x40 and 0x4F
   explicit INA226(const uint8_t address, TwoWire *wire = &Wire);
+
+  //  setup provides full user control, not requiring call to setMaxCurrentShunt(args) function
+  int      setup(float shunt = 0.1, float current_LSB_mA = 0.1, float current_zero_offset_mA = 0, uint16_t bus_V_scaling_e4 = 10000);
 
   bool     begin();
   bool     isConnected();
@@ -173,6 +177,8 @@ private:
   float    _current_LSB;
   float    _shunt;
   float    _maxCurrent;
+  float    _current_zero_offset = 0;
+  uint16_t _bus_V_scaling_e4 = 10000;
 
   uint8_t   _address;
   TwoWire * _wire;
