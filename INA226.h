@@ -1,7 +1,7 @@
 #pragma once
 //    FILE: INA226.h
 //  AUTHOR: Rob Tillaart
-// VERSION: 0.6.1
+// VERSION: 0.6.2
 //    DATE: 2021-05-18
 // PURPOSE: Arduino library for INA226 power sensor
 //     URL: https://github.com/RobTillaart/INA226
@@ -13,7 +13,7 @@
 #include "Wire.h"
 
 
-#define INA226_LIB_VERSION              "0.6.1"
+#define INA226_LIB_VERSION              "0.6.2"
 
 
 //  set by setAlertRegister
@@ -46,6 +46,7 @@
 #define INA226_MAX_WAIT_MS                600   //  millis
 
 #define INA226_MAX_SHUNT_VOLTAGE          (81.92 / 1000)
+
 
 //  for setAverage() and getAverage()
 enum ina226_average_enum {
