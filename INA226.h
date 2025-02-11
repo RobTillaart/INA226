@@ -47,6 +47,7 @@
 
 #define INA226_MAX_SHUNT_VOLTAGE          (81.92 / 1000)
 
+
 //  for setAverage() and getAverage()
 enum ina226_average_enum {
     INA226_1_SAMPLE     = 0,

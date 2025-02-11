@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add **configure()**, thanks to pk17r
 - Add **INA226_calibrate.ino** example
 - update readme.md
+- align debug prints of configure() and setMaxCurrentShunt()
+- minor optimization in getBusVoltage()
+
 
 ## [0.6.1] - 2025-01-27
 - fix #49, precision math setMaxCurrentShunt() in INA226.cpp

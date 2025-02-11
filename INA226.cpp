@@ -73,7 +73,13 @@ uint8_t INA226::getAddress()
 float INA226::getBusVoltage()
 {
   uint16_t val = _readRegister(INA226_BUS_VOLTAGE);
-  return val * 1.25e-3 * _bus_V_scaling_e4 / 10000;  //  fixed 1.25 mV
+  //    return val * 1.25e-3 * _bus_V_scaling_e4 / 10000;  //  fixed 1.25 mV
+  val *= 1.25e-3;
+  if (_bus_V_scaling_e4 != 10000)
+  {
+    val *= _bus_V_scaling_e4 * 1.0e-4;
+  }
+  return val;
 }
 
 
@@ -115,6 +121,7 @@ bool INA226::waitConversionReady(uint32_t timeout)
   }
   return false;
 }
+
 
 ////////////////////////////////////////////////////////
 //
@@ -307,18 +314,19 @@ int INA226::setMaxCurrentShunt(float maxCurrent, float shunt, bool normalize)
   _shunt = shunt;
 
 #ifdef printdebug
-  Serial.print("Final current_LSB:\t");
+  Serial.println("\n***** INA 226 SET VALUES *****");
+  Serial.print("Shunt:\t");
+  Serial.print(_shunt, 4);
+  Serial.println(" Ohm");
+  Serial.print("Current_LSB:\t");
   Serial.print(_current_LSB * 1e+6, 1);
   Serial.println(" uA / bit");
   Serial.print("Calibration:\t");
   Serial.println(calib);
-  Serial.print("Max current:\t");
+  Serial.print("Max Measurable Current:\t");
   Serial.print(_maxCurrent, 3);
   Serial.println(" A");
-  Serial.print("Shunt:\t");
-  Serial.print(_shunt, 4);
-  Serial.println(" Ohm");
-  Serial.print("ShuntV:\t");
+  Serial.print("maxShuntVoltage:\t");
   Serial.print(shuntVoltage, 4);
   Serial.println(" Volt");
 #endif
@@ -357,6 +365,9 @@ int INA226::configure(float shunt, float current_LSB_mA, float current_zero_offs
   Serial.print("Max Measurable Current:\t");
   Serial.print(_maxCurrent, 3);
   Serial.println(" A");
+  Serial.print("maxShuntVoltage:\t");
+  Serial.print(_maxCurrent * _shunt, 4);
+  Serial.println(" Volt");
 #endif
 
   return INA226_ERR_NONE;
