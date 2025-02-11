@@ -79,9 +79,6 @@ public:
   //  address between 0x40 and 0x4F
   explicit INA226(const uint8_t address, TwoWire *wire = &Wire);
 
-  //  setup provides full user control, not requiring call to setMaxCurrentShunt(args) function
-  int      setup(float shunt = 0.1, float current_LSB_mA = 0.1, float current_zero_offset_mA = 0, uint16_t bus_V_scaling_e4 = 10000);
-
   bool     begin();
   bool     isConnected();
   uint8_t  getAddress();
@@ -127,6 +124,8 @@ public:
   //  maxCurrent >= 0.001           otherwise returns INA226_ERR_MAXCURRENT_LOW
   //  shunt      >= 0.001           otherwise returns INA226_ERR_SHUNT_LOW
   int      setMaxCurrentShunt(float maxCurrent = 20.0, float shunt = 0.002, bool normalize = true);
+  //  configure provides full user control, not requiring call to setMaxCurrentShunt(args) function
+  int      configure(float shunt = 0.1, float current_LSB_mA = 0.1, float current_zero_offset_mA = 0, uint16_t bus_V_scaling_e4 = 10000);
   bool     isCalibrated()     { return _current_LSB != 0.0; };
 
   //  These functions return zero if not calibrated!

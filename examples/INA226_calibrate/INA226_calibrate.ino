@@ -1,7 +1,7 @@
 //
 //    FILE: INA226_calibrate.ino
 //  AUTHOR: Prashant Kumar
-// PURPOSE: accurate calibration of shunt resistance, bus voltage, current zero offset and full user control
+// PURPOSE: accurate calibration of shunt resistance, current zero offset, bus voltage scaling and full user control
 //     url: https://github.com/pk17r/INA226
 
 
@@ -46,10 +46,10 @@ void setup()
   float current_zero_offset_mA = 0;         /* current_zero_offset_mA (Current Zero Offset in milli Amperes, default = 0) */
   uint16_t bus_V_scaling_e4 = 10000;        /* bus_V_scaling_e4 (Bus Voltage Scaling Factor, default = 10000) */
 
-  if(INA.setup(shunt, current_LSB_mA, current_zero_offset_mA, bus_V_scaling_e4))
-    Serial.println("\n***** Setup Error! Chosen values outside range *****\n");
+  if(INA.configure(shunt, current_LSB_mA, current_zero_offset_mA, bus_V_scaling_e4))
+    Serial.println("\n***** Configuration Error! Chosen values outside range *****\n");
   else
-    Serial.println("\n***** INA 226 USER SET VALUES *****");
+    Serial.println("\n***** INA 226 CONFIGURE *****");
   Serial.print("Shunt:\t");
   Serial.print(shunt, 4);
   Serial.println(" Ohm");

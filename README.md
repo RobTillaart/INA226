@@ -107,10 +107,9 @@ All data bytes are transmitted most significant byte first._
 
 ## About Measurements
 
-Calibration with  **setup()**  or **setMaxCurrentShunt()** is mandatory to get **getCurrent()** and 
-**getPower()** to work. Using **setup()** user has flexibility of setting desired current least 
-significant bit value. An easy way to calibrate for shunt resistance is provided in INA226_calibrate 
-example. Use either **setup()** or **setMaxCurrentShunt()**.
+Calibration with **setMaxCurrentShunt()** or **configure()** is mandatory to get **getCurrent()** and 
+**getPower()** to work. Using **configure()** user has flexibility of setting desired current least 
+significant bit value. Use either of **configure()** or **setMaxCurrentShunt()**.
 
 An easy procedure to accurately calibrate shunt resistance, current zero offset and bus 
 voltage scaling has been provided under examples in **INA226_calibration example**. 
@@ -266,9 +265,9 @@ See datasheet.
 
 Calibration is mandatory to get **getCurrent()** and **getPower()** to work.
 
-- **int setup(float shunt = 0.1, float current_LSB_mA = 0.1, float current_zero_offset_mA = 0,** 
+- **int configure(float shunt = 0.1, float current_LSB_mA = 0.1, float current_zero_offset_mA = 0,** 
 **uint16_t bus_V_scaling_e4 = 10000)** set the calibration register based user provided current_LSB. 
-Returns Error code, see below. Only one out of **int setMaxCurrentShunt()** or **int setup()** is to 
+Returns Error code, see below. Only one out of **int setMaxCurrentShunt()** or **int configure()** is to 
 be used. 
 - **int setMaxCurrentShunt(float ampere = 20.0, float ohm = 0.002, bool normalize = true)** 
 set the calibration register based upon the shunt and the max Ampere. 
