@@ -76,6 +76,20 @@ enum ina226_timing_enum {
 };
 
 
+//  ALERT Pin Polarity definition
+enum ina226_alert_pin_polarity_enum {
+    INA226_ACTIVE_LOW  = 0,
+    INA226_ACTIVE_HIGH = 1
+};
+
+
+//  ALERT Pin Latch definition
+enum ina226_alert_latch_enum {
+    INA226_LATCH_TRANSPARENT = 0,
+    INA226_LATCH_ENABLED     = 1
+};
+
+
 class INA226
 {
 public:
@@ -156,7 +170,9 @@ public:
   bool     setAlertRegister(uint16_t mask);
   uint16_t getAlertRegister();
   bool     setAlertLatchEnable(bool latch = false);
+  bool     getAlertLatchEnable();
   bool     setAlertPolarity(bool inverted = false);
+  bool     getAlertPolarity();
 
   //  ALERT LIMIT
   //  (not tested)

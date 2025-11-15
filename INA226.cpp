@@ -434,6 +434,13 @@ bool INA226::setAlertLatchEnable(bool latch)
 }
 
 
+bool INA226::getAlertLatchEnable()
+{
+  uint16_t mask = _readRegister(INA226_MASK_ENABLE);
+  return mask & INA226_ALERT_LATCH_ENABLE_FLAG;
+}
+
+
 bool INA226::setAlertPolarity(bool inverted)
 {
   uint16_t mask = _readRegister(INA226_MASK_ENABLE);
@@ -442,6 +449,13 @@ bool INA226::setAlertPolarity(bool inverted)
   uint16_t result = _writeRegister(INA226_MASK_ENABLE, mask);
   if (result != 0) return false;
   return true;
+}
+
+
+bool INA226::getAlertPolarity()
+{
+  uint16_t mask = _readRegister(INA226_MASK_ENABLE);
+  return mask & INA226_ALERT_POLARITY_FLAG;
 }
 
 

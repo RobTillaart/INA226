@@ -13,7 +13,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   - obsoletes getAlertFlag().
 - add **void setAlertLatchEnable(bool latch = false)**
 - add **void setAlertPolarity(bool inverted = false)**
+- add **void getAlertLatchEnable()**
+- add **void getAlertPolarity()**
 - add **INA226_pointer.ino** examples
+- make **INA226_MINIMAL_SHUNT_OHM** command line option
 - update GitHub actions
 - update readme.md
 - minor edits

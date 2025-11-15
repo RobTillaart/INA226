@@ -343,8 +343,10 @@ Returns true if write to register is successful.
 - **uint16_t getAlertRegister()** returns the mask set by **setAlertRegister()**.
 - **bool setAlertLatchEnable(bool latch = false)** idem.
 Returns true if write to register is successful.
+- **bool getAlertLatchEnable()** return current status.
 - **bool setAlertPolarity(bool inverted = false)** idem.
 Returns true if write to register is successful.
+- **bool getAlertPolarity()** return current status.
 
 
 |  description alert register  |  mask   |  short  |
