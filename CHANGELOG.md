@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.6.x] - 2026-08-12
-- add INA226_USI - Kudos to Peter Simoons
+- add INA226_USI section - Kudos to Peter Simoons
 - add INA226 datasheet sept 2024
 - update INA_comparison_table.md
 - update readme.md
