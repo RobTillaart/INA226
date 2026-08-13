@@ -37,18 +37,15 @@ A few important maxima, see datasheet, chapter 6.
 Feedback as always is welcome.
 
 
-### Derived class INA226_USI
+### Derived class INA226_USI for ATtiny
 
 A derived version of the INA226 library was made by Peter Simoons based 
 upon the 0.6.6 version for the ATtiny devices.
+It is confirmed to work for ATtiny85 with hardware.
 
-This ATtiny version can be found in the folder **INA226_USI** in this repo.
+The ATtiny version can be found here - https://github.com/RobTillaart/INA226_USI.
 The main difference is that the TwoWire I2C interface calls are replaced 
 by TinyWireM I2C interface.
-
-The folder should be copied to your library folder so you can use it for 
-your ATtiny adventures. 
-This library will be upgradedd to a full independent library a.s.a.p.
 
 
 ### 0.5.0 Breaking change
